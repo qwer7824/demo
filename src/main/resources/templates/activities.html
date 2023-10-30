@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Activity List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+
+
+    <style>
+        h1, h3 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        th, td {
+            text-align: center;
+        }
+            form-group {
+        margin-bottom: 20px;
+    }
+    </style>
+    <script>
+        function saveActivities() {
+            fetch("/redis/save")
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        throw new Error("Error: " + response.status);
+                    }
+                })
+                .then(data => {
+                    console.log(data); // 성공적으로 요청이 완료되면 콘솔에 출력
+                })
+                .catch(error => {
+                    console.error(error); // 요청이 실패했을 경우 에러 메시지 출력
+                });
+        }
+
+        function deleteRedisActivity(id) {
+            const confirmDelete = confirm("삭제하시겠습니까?");
+
+            fetch("/redis/" + id, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        throw new Error("Error: " + response.status);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        function deleteDbActivity(id) {
+            const confirmDelete = confirm("삭제 하시겠습니까?");
+
+            fetch("/db/" + id, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        throw new Error("Error: " + response.status);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        function deleteAllActivities() {
+            const confirmDelete = confirm("전체 삭제 하시겠습니까?");
+
+            fetch('/redis/deleteAll', {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        console.error('Error:', response.status);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+function addActivityButton() {
+  var name = $("#name").val();
+  var venue = $("input[name='venue']:checked").val();
+  var capacity = $("input[name='capacity']:checked").val();
+
+  // 활동 추가 AJAX 요청
+  $.ajax({
+    type: "POST",
+    url: "/db/add",
+    data: {
+      name: name,
+      venue: venue,
+      capacity: capacity
+    },
+    success: function(response) {
+      console.log("활동이 추가되었습니다:", response);
+      // 추가된 활동에 대한 처리 로직을 작성합니다.
+    },
+    error: function(error) {
+      console.error("활동 추가 실패:", error);
+      // 실패한 경우에 대한 처리 로직을 작성합니다.
+    }
+  });
+
+  // 모달 창 닫기
+  $("#addActivityModal").modal("hide");
+}
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Activity List</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <button class="btn btn-primary" onclick="saveActivities()">DB -> Redis</button>
+            <button class="btn btn-primary" onclick="deleteAllActivities()">RedisAllDelete</button>
+            <table class="table">
+                <h3>Redis</h3>
+                <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Venue</th>
+                    <th>Capacity</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="redisActivity : ${RedisActivities}">
+                    <td th:text="${redisActivity.id}"></td>
+                    <td th:text="${redisActivity.name}"></td>
+                    <td th:text="${redisActivity.venue}"></td>
+                    <td th:text="${redisActivity.capacity}"></td>
+                    <td>
+                        <button class="btn btn-danger" th:onclick="'deleteRedisActivity(\'' + ${redisActivity.id} + '\')'">X</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <button class="btn btn-primary" onclick="showModal()">DB 추가</button>
+
+            <table class="table">
+                <h3>DB</h3>
+                <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Venue</th>
+                    <th>Capacity</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="dbActivity : ${DBActivities}">
+                    <td th:text="${dbActivity.id}"></td>
+                    <td th:text="${dbActivity.name}"></td>
+                    <td th:text="${dbActivity.venue}"></td>
+                    <td th:text="${dbActivity.capacity}"></td>
+                    <td>
+                        <button class="btn btn-danger" th:onclick="'deleteDbActivity(\'' + ${dbActivity.id} + '\')'">X</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 활동 추가 모달 창 -->
+<div class="modal fade" id="addActivityModal" tabindex="-1" role="dialog" aria-labelledby="addActivityModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addActivityModalLabel">Add Activity</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <!-- 활동 추가 폼 -->
+                <form>
+                    <div class="form-group">
+                        <label for="name"></label><input type="text" class="form-control" id="name" placeholder="Name"/>
+                    </div>
+                    <div class="form-group">
+                        <div class="btn-group" role="group" aria-label="venue button group" id="venue">
+                            <input type="radio" class="btn-check" name="venue" id="venue0" value="0" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary" for="venue0">전체</label>
+
+                            <input type="radio" class="btn-check" name="venue" id="venue1" value="1" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="venue1">실내</label>
+
+                            <input type="radio" class="btn-check" name="venue" id="venue2" value="2" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="venue2">실외</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="btn-group" role="group" aria-label="capacity group" id="capacity">
+                            <input type="radio" class="btn-check" name="capacity" id="capacity0" value="0" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary" for="capacity0">전체</label>
+
+                            <input type="radio" class="btn-check" name="capacity" id="capacity1" value="1" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="capacity1">1인</label>
+
+                            <input type="radio" class="btn-check" name="capacity" id="capacity2" value="2" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="capacity2">2인</label>
+
+                            <input type="radio" class="btn-check" name="capacity" id="capacity3" value="3" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="capacity3">3인</label>
+
+                            <input type="radio" class="btn-check" name="capacity" id="capacity4" value="4" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="capacity4">4인</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="addActivityButton()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.0.js" defer></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
+<script>
+    function showModal() {
+    $('#addActivityModal').modal('show');
+}
+</script>
+</body>
+</html>
