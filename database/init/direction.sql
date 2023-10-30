@@ -1,0 +1,6 @@
+CREATE TABLE activity (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  venue INT NOT NULL,
+  capacity INT NOT NULL
+);
