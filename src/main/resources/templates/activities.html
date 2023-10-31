@@ -19,7 +19,7 @@
         th, td {
             text-align: center;
         }
-            form-group {
+            .form-group {
         margin-bottom: 20px;
     }
     </style>
@@ -117,6 +117,7 @@ function addActivityButton() {
     },
     success: function(response) {
       console.log("활동이 추가되었습니다:", response);
+       location.reload();
       // 추가된 활동에 대한 처리 로직을 작성합니다.
     },
     error: function(error) {
