@@ -1,6 +1,7 @@
 package com.today.demo.controller;
 
 import com.today.demo.entity.Activity;
+import com.today.demo.redisService.ActivityRedisTemplateService;
 import com.today.demo.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,11 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final ActivityService activityService;
+    private final ActivityRedisTemplateService activityRedisTemplateService;
 
     @GetMapping("/")
         public String home(Model model) {
-        List<Activity> ActivityList = activityService.allActivity();
+        List<Activity> ActivityList = activityRedisTemplateService.findAll();
         int activities = ActivityList.size();
 
         model.addAttribute("activities",activities);
