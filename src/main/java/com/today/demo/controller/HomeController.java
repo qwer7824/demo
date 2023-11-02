@@ -16,8 +16,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomeController {
 
+    private final ActivityService activityService;
+
     @GetMapping("/")
         public String home(Model model) {
+        List<Activity> ActivityList = activityService.allActivity();
+        int activities = ActivityList.size();
+
+        model.addAttribute("activities",activities);
         return "main";
     }
 

@@ -105,4 +105,7 @@ public class ActivityService {
         }
         return null;
     }
+    public List<Activity> allActivity(){
+        return activityRepository.findAll();
+    }
 }

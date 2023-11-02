@@ -12,6 +12,14 @@
 </head>
 
 <style>
+
+    @font-face {
+    font-family: 'YEONGJUPunggiGinsengTTF';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/YEONGJUPunggiGinsengTTF.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
     body {
         background-color: #f8f9fa;
     }
@@ -20,7 +28,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        height: 80vh;
     }
 
     .content {
@@ -38,6 +46,12 @@
         display: block;
         margin-bottom: 10px;
     }
+
+    .today{
+    color : darkgreen;
+    text-align: right;
+    }
+
 
     select,
     button {
@@ -59,7 +73,7 @@
       font-weight:bold;
       text-decoration:none ;
       color:black ;
-
+      align-self: center;
      }
 
       .btn-group {
@@ -78,6 +92,15 @@
       background-color: #198754;
       border-color: #198754;
   }
+
+    .navbar>.container-fluid{
+        justify-content: center;
+    }
+    .nava{
+    font-family: YEONGJUPunggiGinsengTTF;
+    font-size: 40px;
+    {
+
 </style>
 <body>
 <script type="text/javascript">
@@ -96,7 +119,7 @@
                 data: { venue: venue, capacity: capacity },
                 success: function(data) {
                     console.log("Error:", data);
-                    $("a").html(data);
+                $("#result").html(data);
                 },
                 error: function(xhr, status, error) {
                     // Handle error here
@@ -108,10 +131,17 @@
 </script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4562363793498774"
         crossorigin="anonymous"></script>
+
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="nava">오늘 뭐하지 ?</a>
+    </div>
+</nav>
+
 <div id="body-wrapper">
     <div id=".content">
+        <p class="today">오늘의 할일 : <span th:text="${activities}"></span>개 </p>
         <form id="searchForm">
-
             <div class="btn-group" role="group" aria-label="venue button group" id="venue">
                 <input type="radio" class="btn-check" name="venue" id="venue0" value="0" autocomplete="off" checked>
                 <label class="btn btn-outline-primary" for="venue0">전체</label>
@@ -143,11 +173,15 @@
 
             <button type="submit" class="btn btn-outline-success">Search</button>
         </form>
-        <a id="result"></a>
-
+        <div class="card">
+            <a id="result"></a>
+        </div>
     </div>
 </div>
 
+<footer class="py-1 my-1">
+    <p class="text-center text-muted">© 2023 todaywork.site</p>
+</footer>
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
