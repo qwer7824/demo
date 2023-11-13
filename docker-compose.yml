@@ -8,6 +8,19 @@ services:                                               # 이 항목 밑에 실�
     image: sh7824/today-redis
     ports:
       - "6379:6379"
+  jenkins:
+    container_name: jenkins
+    build:
+      context: jenkins-dockerfile
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    user: root
+    ports:
+      - 8888:8080
+      - 50000:50000
+    volumes:
+      - /home/ec2-user/jenkins:/var/jenkins_home
+      - /home/ec2-user/.ssh:/root/.ssh
   today-database:
     container_name: today-database
     build:
