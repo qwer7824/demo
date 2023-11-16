@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<style>
+    @font-face {
+    font-family: 'YEONGJUPunggiGinsengTTF';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/YEONGJUPunggiGinsengTTF.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+</style>
+<body>
+    <th:block th:fragment="navbarFragment">
+        <!-- Responsive navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: seagreen;">
+            <div class="container px-lg-5" style="background-color: seagreen;">
+                <a style=" font-family: 'YEONGJUPunggiGinsengTTF';" class="navbar-brand" href="/">오늘 뭐하지 ?</a>
+            </div>
+        </nav>
+    </th:block>
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</html>

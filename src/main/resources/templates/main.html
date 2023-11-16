@@ -107,13 +107,10 @@ background-color: #75c49f;
     .navbar>.container-fluid{
         justify-content: center;
     }
-    .nava{
-    font-family: YEONGJUPunggiGinsengTTF;
-    font-size: 40px;
-    {
-
 </style>
 <body>
+<th:block th:replace="fragments/navbar :: navbarFragment"></th:block>
+
 <script type="text/javascript">
     $(document).ready(function() {
 
@@ -143,11 +140,6 @@ background-color: #75c49f;
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4562363793498774"
         crossorigin="anonymous"></script>
 <script async src="https://app2.weatherwidget.org/js/?id=ww_5a724853ea9dc"></script>
-<nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="nava">오늘 뭐하지 ?</a>
-    </div>
-</nav>
 
 <div id="body-wrapper">
     <div id=".content">
