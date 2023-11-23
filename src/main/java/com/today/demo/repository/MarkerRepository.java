@@ -8,4 +8,5 @@ import java.util.List;
 
 @Repository
 public interface MarkerRepository extends JpaRepository<Marker, Long> {
+    List<Marker> findByVenue(int venue);
 }
