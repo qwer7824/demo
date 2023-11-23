@@ -1,4 +1,4 @@
-package com.today.demo.controller;
+package com.today.demo.controller.activity;
 
 
 import com.today.demo.redisService.ActivityRedisTemplateService;

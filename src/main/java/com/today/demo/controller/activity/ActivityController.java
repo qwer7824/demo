@@ -1,4 +1,4 @@
-package com.today.demo.controller;
+package com.today.demo.controller.activity;
 
 import com.today.demo.entity.Activity;
 import com.today.demo.redisService.ActivityRedisTemplateService;
@@ -25,7 +25,7 @@ public class ActivityController {
     private final ActivityRedisTemplateService activityRedisTemplateService;
     private final ActivityService activityService;
 
-    @GetMapping("/redis/home")
+    @GetMapping("/admin/activity")
     public String getAllActivities(Model model) {
         List<Activity> RedisActivities = activityRedisTemplateService.findAll();
         List<Activity> DBActivities = activityService.allActivity();
@@ -35,6 +35,6 @@ public class ActivityController {
 
         model.addAttribute("RedisActivities", RedisActivities);
         model.addAttribute("DBActivities", DBActivities);
-        return "activities";
+        return "admin/activities";
     }
 }

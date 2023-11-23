@@ -1,4 +1,4 @@
-package com.today.demo.controller;
+package com.today.demo.controller.activity;
 
 import com.today.demo.entity.Activity;
 import com.today.demo.service.ActivityService;
@@ -17,13 +17,13 @@ public class ActivityRestController {
 
     private final ActivityService activityService;
 
-    @DeleteMapping("/db/{id}")
+    @DeleteMapping("/admin/db/{id}")
     public ResponseEntity<String> deleteActivity(@PathVariable int id) {
         activityService.delete(id);
         return ResponseEntity.ok("Activity DB with ID " + id + " has been deleted.");
     }
 
-    @PostMapping("/db/add")
+    @PostMapping("/admin/db/activityAdd")
     public ResponseEntity<Activity> addActivity(
             @RequestParam String name,
             @RequestParam int venue,

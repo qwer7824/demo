@@ -21,7 +21,6 @@ import java.util.*;
 public class ActivityRedisTemplateService {
 
     private static final String CACHE_KEY = "ACTIVITY";
-    private final ActivityRepository activityRepository;
 
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
