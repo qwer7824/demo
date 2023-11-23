@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+
+<body>
+
+    <th:block th:fragment="mapNavFragment">
+        <!-- Responsive navbar-->
+            <div class="nav-bar">
+                <a id="nav-item1" class="nav-item" href="/map/0">전국</a>
+                <a id="nav-item2" class="nav-item" href="/map/1">서울</a>
+                <a id="nav-item3" class="nav-item" href="/map/2">경기</a>
+            </div>
+    </th:block>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</html>

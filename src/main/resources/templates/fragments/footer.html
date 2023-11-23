@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+<body>
+    <th:block th:fragment="footerFragment">
+        <div class="nav-footer">
+            <div id="nav-slot" class="nav-slot" onclick="location.href ='/'">할일 추천</div>
+            <div id="nav-slot2" class="nav-slot" onclick="location.href ='/map/0'">할일 지도</div>
+        </div>
+    </th:block>
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</html>
