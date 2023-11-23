@@ -49,7 +49,3 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
-
-    today:
-        base:
-          url: http://localhost/dir/

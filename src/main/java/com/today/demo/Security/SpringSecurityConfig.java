@@ -27,8 +27,8 @@ public class SpringSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                        .requestMatchers("/","/search","/login").permitAll()
-                        .requestMatchers("/redis/**","/db/**").hasRole("ADMIN")
+                        .requestMatchers("/","/map/**","/search","/login","/css/**", "/js/**","/map/marker/**").permitAll()
+                        .requestMatchers("/admin/**,/redis/**","/db/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
