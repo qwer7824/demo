@@ -18,7 +18,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-@PreAuthorize("hasAnyRole('ADMIN')")
 public class ActivityController {
 
 

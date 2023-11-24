@@ -16,7 +16,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-@PreAuthorize("hasAnyRole('ADMIN')")
 public class mapAdminController {
 
     private final MarkerRepository markerRepository;

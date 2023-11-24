@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@PreAuthorize("hasAnyRole('ADMIN')")
 public class RedisActivityRestController {
 
     private final ActivityRepository activityRepository;
