@@ -16,7 +16,7 @@ public class ActivityRestController {
 
     private final ActivityService activityService;
 
-    @DeleteMapping("/admin/db/{id}")
+    @DeleteMapping("/admin/activity/db/{id}")
     public ResponseEntity<String> deleteActivity(@PathVariable int id) {
         activityService.delete(id);
         return ResponseEntity.ok("Activity DB with ID " + id + " has been deleted.");

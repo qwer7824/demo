@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Activity List</title>
+    <title>Maps List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
 
@@ -45,6 +45,7 @@
             data: JSON.stringify(dto),
             success: function(response) {
                 // 성공 시 처리할 로직
+                location.reload();
             },
             error: function(xhr, status, error) {
                 // 에러 시 처리할 로직
@@ -54,12 +55,33 @@
       // 모달 창 닫기
       $("#addMapsModal").modal("hide");
     }
+
+            function deleteDbMap(id) {
+            const confirmDelete = confirm("삭제 하시겠습니까?");
+
+            fetch("/admin/marker/db/" + id, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        throw new Error("Error: " + response.status);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
 </script>
 <body>
 <div class="container">
     <h1>Map List</h1>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md">
             <button class="btn btn-primary" onclick="showModal()">DB 추가</button>
 
             <table class="table">
@@ -80,9 +102,28 @@
                     <td th:text="${dbMaps.venue == 1 ? '서울' : dbMaps.venue == 2 ? '경기' : dbMaps.venue == 3 ? '인천' : dbMaps.venue == 4 ? '강원' : dbMaps.venue == 5 ? '충북' : dbMaps.venue == 6 ? '충남' : dbMaps.venue == 7 ? '대전' : dbMaps.venue == 8 ? '경북' : dbMaps.venue == 9 ? '경남' : dbMaps.venue == 10 ? '부산' : dbMaps.venue == 11 ? '울산' : dbMaps.venue == 12 ? '대구' : dbMaps.venue == 13 ? '광주' : dbMaps.venue == 14 ? '전북' : dbMaps.venue == 15 ? '전남' : dbMaps.venue == 16 ? '제주' : ''}"></td>
                     <td th:text="${dbMaps.name}"></td>
                     <td th:text="${dbMaps.tel}"></td>
+                    <td>
+                        <button class="btn btn-danger" th:onclick="'deleteDbMap(\'' + ${dbMaps.id} + '\')'">X</button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
+            <nav>
+                <ul class="pagination justify-content-center">
+                    <li th:class="${currentPage == 0 ? 'page-item disabled' : 'page-item'}">
+                        <a class="page-link" th:href="@{/admin/maps(page=0)}">처음</a>
+                    </li>
+                    <li th:class="${currentPage == 0 ? 'page-item disabled' : 'page-item'}">
+                        <a class="page-link" th:href="@{/admin/maps(page=${currentPage - 1})}">이전</a>
+                    </li>
+                    <li th:class="${currentPage == totalPages - 1 ? 'page-item disabled' : 'page-item'}">
+                        <a class="page-link" th:href="@{/admin/maps(page=${currentPage + 1})}">다음</a>
+                    </li>
+                    <li th:class="${currentPage == totalPages - 1 ? 'page-item disabled' : 'page-item'}">
+                        <a class="page-link" th:href="@{/admin/maps(page=${totalPages - 1})}">마지막</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
     <!-- 추가 모달 창 -->

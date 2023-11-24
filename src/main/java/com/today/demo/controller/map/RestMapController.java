@@ -18,27 +18,22 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RestMapController {
 
-    private final MarkerRepository markerRepository;
     private final MarkerService markerService;
 
     @GetMapping("/map/marker/{venue}")
     public List<MarkerDTO> getMarkers(@PathVariable("venue") int venue) {
-        List<Marker> markers;
-
-        if (venue == 0) {
-            markers = markerRepository.findAll();
-        } else {
-            markers = markerRepository.findByVenue(venue);
-        }
-
-        return markers.stream()
-                .map(marker -> new MarkerDTO(marker.getId(), marker.getCategory(), marker.getVenue(),marker.getTel(), marker.getName(), marker.getLatitude(), marker.getLongitude()))
-                .collect(Collectors.toList());
+        return markerService.getMarkers(venue);
     }
 
     @PostMapping("/admin/db/markerAdd")
     public ResponseEntity<String> addMarker(@RequestBody MarkerRequestDTO dto) {
         markerService.markerAdd(dto);
-        return new ResponseEntity<>("Activity added successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Marker added successfully", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/admin/marker/db/{id}")
+    public ResponseEntity<String> deleteActivity(@PathVariable Long id) {
+        markerService.markerDelete(id);
+        return ResponseEntity.ok("Marker DB with ID " + id + " has been deleted.");
     }
 }

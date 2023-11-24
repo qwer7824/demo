@@ -65,7 +65,7 @@
         function deleteDbActivity(id) {
             const confirmDelete = confirm("삭제 하시겠습니까?");
 
-            fetch("/admin/db/" + id, {
+            fetch("/admin/activity/db/" + id, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
