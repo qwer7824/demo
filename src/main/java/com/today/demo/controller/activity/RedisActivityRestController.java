@@ -26,7 +26,7 @@ public class RedisActivityRestController {
     private final ActivityRedisTemplateService activityRedisTemplateService;
 
     // 데이터 초기 셋팅을 위한 임시 메서드
-    @GetMapping("/redis/save")
+    @GetMapping("/admin/activity/redis/save")
     public String save() {
         List<Activity> activityList = activityRepository.findAll();
 
@@ -44,12 +44,12 @@ public class RedisActivityRestController {
         return "success";
     }
 
-    @DeleteMapping("/redis/{id}")
+    @DeleteMapping("/admin/activity/redis/{id}")
     public ResponseEntity<String> deleteActivity(@PathVariable int id) {
         activityRedisTemplateService.delete(id);
         return ResponseEntity.ok("Activity Redis with ID " + id + " has been deleted.");
     }
-    @DeleteMapping("/redis/deleteAll")
+    @DeleteMapping("/admin/activity/redis/deleteAll")
     public void deleteAllActivity() {
         activityRedisTemplateService.deleteAll();
     }

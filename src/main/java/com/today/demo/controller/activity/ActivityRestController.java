@@ -22,7 +22,7 @@ public class ActivityRestController {
         return ResponseEntity.ok("Activity DB with ID " + id + " has been deleted.");
     }
 
-    @PostMapping("/admin/db/activityAdd")
+    @PostMapping("/admin/activity/db/add")
     public ResponseEntity<Activity> addActivity(
             @RequestParam String name,
             @RequestParam int venue,
