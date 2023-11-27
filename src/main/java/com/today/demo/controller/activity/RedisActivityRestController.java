@@ -27,7 +27,7 @@ public class RedisActivityRestController {
 
     // 데이터 초기 셋팅을 위한 임시 메서드
     @GetMapping("/admin/activity/redis/save")
-    public String save() {
+    public void save() {
         List<Activity> activityList = activityRepository.findAll();
 
         List<Activity> activityDtoList = activityList.stream()
@@ -40,8 +40,6 @@ public class RedisActivityRestController {
                 .toList();
 
         activityDtoList.forEach(activityRedisTemplateService::save);
-
-        return "success";
     }
 
     @DeleteMapping("/admin/activity/redis/{id}")
