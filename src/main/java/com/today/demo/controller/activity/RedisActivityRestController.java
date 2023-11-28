@@ -4,6 +4,7 @@ package com.today.demo.controller.activity;
 import com.today.demo.redisService.ActivityRedisTemplateService;
 import com.today.demo.entity.Activity;
 import com.today.demo.repository.ActivityRepository;
+import com.today.demo.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,22 +25,12 @@ public class RedisActivityRestController {
 
     private final ActivityRepository activityRepository;
     private final ActivityRedisTemplateService activityRedisTemplateService;
+    private final ActivityService activityService;
 
     // 데이터 초기 셋팅을 위한 임시 메서드
     @GetMapping("/admin/activity/redis/save")
     public void save() {
-        List<Activity> activityList = activityRepository.findAll();
-
-        List<Activity> activityDtoList = activityList.stream()
-                .map(activity -> Activity.builder()
-                        .id(activity.getId())
-                        .name(activity.getName())
-                        .venue(activity.getVenue())
-                        .capacity(activity.getCapacity())
-                        .build())
-                .toList();
-
-        activityDtoList.forEach(activityRedisTemplateService::save);
+        activityService.save();
     }
 
     @DeleteMapping("/admin/activity/redis/{id}")

@@ -108,4 +108,18 @@ public class ActivityService {
     public List<Activity> allActivity(){
         return activityRepository.findAll();
     }
+    public void save() {
+        List<Activity> activityList = activityRepository.findAll();
+
+        List<Activity> activityDtoList = activityList.stream()
+                .map(activity -> Activity.builder()
+                        .id(activity.getId())
+                        .name(activity.getName())
+                        .venue(activity.getVenue())
+                        .capacity(activity.getCapacity())
+                        .build())
+                .toList();
+
+        activityDtoList.forEach(activityRedisTemplateService::save);
+    }
 }
