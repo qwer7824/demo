@@ -60,19 +60,22 @@ window.onload = changeColor;
         var positions = data.map(marker => ({
           latlng: new kakao.maps.LatLng(marker.latitude, marker.longitude),
           name: marker.name,
-          tel: marker.tel
+          tel: marker.tel,
+          category : marker.category
         }));
 
         for (var i = 0; i < positions.length; i++) {
           (function(i) { // 클로저를 사용하여 i 값을 유지합니다.
             var name = positions[i].name;
             var tel = positions[i].tel;
+            var category = positions[i].category;
 
             var marker = new kakao.maps.Marker({
               map: map,
               position: positions[i].latlng,
               name: positions[i].name,
-              tel : positions[i].tel
+              tel : positions[i].tel,
+              category : positions[i].category
             });
             var overlay = null; // 초기에 overlay를 null로 설정합니다.
 
@@ -94,6 +97,7 @@ window.onload = changeColor;
                     '        </div>' +
                     '        <div class="body">' +
                     '            <div class="desc">' +
+                    '                <div class="ellipsis address">'+ category +'</div>' +
                     '                <div class="jibun ellipsis">'+ tel +'</div>' +
                     '                <div class="ellipsis address">' + address + '</div>' +
                     '            </div>' +

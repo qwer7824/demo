@@ -1,0 +1,41 @@
+th, td {
+    text-align: center;
+}
+.form-group {
+    margin-bottom: 10px;
+}
+.row{
+    background-color: white;
+    box-shadow: 3px 5px 20px 0px #cbcbcb8a;
+    height: 660px;
+}
+
+body{
+    background-color: #f4f4f4;
+}
+.menubar{
+    width: 70%;
+    background-color: white;
+    margin-bottom: 20px;
+    padding: 10px;
+    margin-top: calc(-1 * var(--bs-gutter-y));
+    margin-right: calc(-.5 * var(--bs-gutter-x));
+    margin-left: calc(-.5 * var(--bs-gutter-x));
+    box-shadow: 3px 5px 20px 0px #cbcbcb8a;
+}
+
+.menubar2{
+    width: 30%;
+    background-color: white;
+    margin-bottom: 20px;
+    padding: 10px;
+    margin-top: calc(-1 * var(--bs-gutter-y));
+    margin-right: calc(-.5 * var(--bs-gutter-x));
+    margin-left: calc(-.5 * var(--bs-gutter-x));
+    box-shadow: 3px 5px 20px 0px #cbcbcb8a;
+}
+
+.double{
+    display: flex;
+    justify-content: space-between;"
+}

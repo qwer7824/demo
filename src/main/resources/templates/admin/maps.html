@@ -4,99 +4,39 @@
     <meta charset="UTF-8">
     <title>Maps List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <style>
-        h1, h3 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        table {
-            width: 100%;
-            margin-bottom: 30px;
-        }
-        th, td {
-            text-align: center;
-        }
-            .form-group {
-        margin-bottom: 10px;
-    }
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}" />
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d6c4c6c3f782007214fd49e572b5bde9&libraries=services"></script>
 </head>
-<script>
-    function addMapsButton() {
-        // DTO 객체 생성
-        var dto = {
-            name: $("#name").val(),
-            category: $("#category").val(),
-            tel: $("#tel").val(),
-            venue: $("#venue").val(),
-            latitude: $("#latitude").val(),
-            longitude: $("#longitude").val()
-        };
-
-        // AJAX 요청
-        $.ajax({
-            url: "/admin/db/markerAdd",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(dto),
-            success: function(response) {
-                // 성공 시 처리할 로직
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                // 에러 시 처리할 로직
-            }
-        });
-
-      // 모달 창 닫기
-      $("#addMapsModal").modal("hide");
-    }
-
-            function deleteDbMap(id) {
-            const confirmDelete = confirm("삭제 하시겠습니까?");
-
-            fetch("/admin/marker/db/" + id, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-                .then(response => {
-                    if (response.ok) {
-                        location.reload();
-                    } else {
-                        throw new Error("Error: " + response.status);
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
-</script>
+<script src="/js/admin/maps.js"></script>
 <body>
 <th:block th:replace="fragments/adminNav :: adminNavFragment"></th:block>
 <div class="container">
-    <h1>Map List</h1>
-    <div class="row">
+    <div class="double">
+    <div class="menubar">
+        <button class="btn btn-dark" onclick="showModal()">지도 추가</button>
+    </div>
+        <div class="menubar2">
+            <button class="btn btn-dark" onclick="showModal2()">카테고리 추가</button>
+        </div>
+    </div>
+    <div class="double">
+    <div class="row" style="width: 70%">
         <div class="col-md">
-            <button class="btn btn-primary" onclick="showModal()">DB 추가</button>
-
             <table class="table">
-                <h3>DB</h3>
                 <thead class="thead-light">
                 <tr>
                     <th>ID</th>
                     <th>category</th>
                     <th>Venue</th>
-                    <th>name</th>
-                    <th>tel</th>
+                    <th>Name</th>
+                    <th>Tel</th>
+                    <th>Del</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="dbMaps : ${DBMaps}">
                     <td th:text="${dbMaps.id}"></td>
-                    <td th:text="${dbMaps.category}"></td>
+                    <td th:text="${dbMaps.category.name}"></td>
                     <td th:text="${dbMaps.venue == 1 ? '서울' : dbMaps.venue == 2 ? '경기' : dbMaps.venue == 3 ? '인천' : dbMaps.venue == 4 ? '강원' : dbMaps.venue == 5 ? '충북' : dbMaps.venue == 6 ? '충남' : dbMaps.venue == 7 ? '대전' : dbMaps.venue == 8 ? '경북' : dbMaps.venue == 9 ? '경남' : dbMaps.venue == 10 ? '부산' : dbMaps.venue == 11 ? '울산' : dbMaps.venue == 12 ? '대구' : dbMaps.venue == 13 ? '광주' : dbMaps.venue == 14 ? '전북' : dbMaps.venue == 15 ? '전남' : dbMaps.venue == 16 ? '제주' : ''}"></td>
                     <td th:text="${dbMaps.name}"></td>
                     <td th:text="${dbMaps.tel}"></td>
@@ -124,12 +64,36 @@
             </nav>
         </div>
     </div>
+        <div class="row" style="width: 30%">
+            <div class="col-md" style="overflow: auto;height: 660px;">
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Del</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="DbCategory : ${DBCategory}">
+                        <td th:text="${DbCategory.id}"></td>
+                        <td th:text="${DbCategory.name}"></td>
+                        <td>
+                            <button class="btn btn-danger" th:onclick="'deleteDbCategory(\'' + ${DbCategory.id} + '\')'">X</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
     <!-- 추가 모달 창 -->
     <div class="modal fade" id="addMapsModal" tabindex="-1" role="dialog" aria-labelledby="addMapsModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addMapsModalLabel">Add Activity</h5>
+                    <h5 class="modal-title" id="addMapsModalLabel">Add Map</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -141,7 +105,9 @@
                             <input type="text" class="form-control" id="name" placeholder="Name"/>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="category" placeholder="Category"/>
+                            <select class="form-select" name="category" id="category">
+                                <option th:each="category : ${DBCategory}" th:value="${category.id}" th:text="${category.name}"></option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control" id="tel" placeholder="Tel"/>
@@ -182,47 +148,35 @@
             </div>
         </div>
 </div>
+    <!-- 카테고리 모달 창 -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    <!-- 추가 폼 -->
+                    <form>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="cname" placeholder="Name"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addCategoryButton()">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.0.js" defer></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
-<script>
-    function showModal() {
-    $('#addMapsModal').modal('show');
-}
-
-</script>
-<script>
-    window.onload = function(){
-        document.getElementById("address_kakao").addEventListener("click", function(){
-            //카카오 지도 발생
-            new daum.Postcode({
-                oncomplete: function(data) { //선택시 입력값 세팅
-                    document.getElementById("address_kakao").value = data.address; // 주소 넣기
-                    convertAddressToCoordinate(data.address);
-                }
-            }).open();
-        });
-    }
-  // 주소를 경도와 위도 값으로 변환하는 함수
-function convertAddressToCoordinate(address) {
-  // 주소-좌표 변환 객체 생성
-  var geocoder = new kakao.maps.services.Geocoder();
-
-  // 주소로 좌표 변환
-  geocoder.addressSearch(address, function(result, status) {
-    if (status === kakao.maps.services.Status.OK) {
-      var latitude = result[0].y; // 위도
-      var longitude = result[0].x; // 경도
-
-      // 변환된 좌표로 원하는 작업 수행
-      document.getElementById("latitude").value = latitude; // 주소 넣기
-      document.getElementById("longitude").value = longitude; // 주소 넣기
-    } else {
-      console.log("주소-좌표 변환 실패");
-    }
-  });
-}
-</script>
 </body>
 </html>
