@@ -1,9 +1,6 @@
 package com.today.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +16,8 @@ public class Marker {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int category;
+    @ManyToOne
+    private Category category;
 
     private int venue;
 
@@ -30,7 +28,6 @@ public class Marker {
     private double latitude;
 
     private double longitude;
-
 }
 
 

@@ -1,10 +1,9 @@
-package com.today.demo.dto;
+package com.today.demo.dto.Request;
 
+import com.today.demo.entity.Category;
 import lombok.Getter;
 import lombok.Setter;
-
 @Getter
-@Setter
 public class MarkerRequestDTO {
     private int category;
     private int venue;

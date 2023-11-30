@@ -1,18 +1,14 @@
 package com.today.demo.controller.map;
 
 import com.today.demo.dto.MarkerDTO;
-import com.today.demo.dto.MarkerRequestDTO;
-import com.today.demo.entity.Marker;
-import com.today.demo.repository.MarkerRepository;
+import com.today.demo.dto.Request.MarkerRequestDTO;
 import com.today.demo.service.MarkerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
