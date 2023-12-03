@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 public class MarkerService {
 
     private final MarkerRepository markerRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     public void markerAdd(MarkerRequestDTO dto){
-        Category category = categoryRepository.findById(dto.getCategory());
+        Category category = categoryService.getCategory(dto.getCategory());
         Marker marker = Marker.builder()
                 .name(dto.getName())
                 .category(category)
@@ -60,12 +60,34 @@ public class MarkerService {
 
     public void updateMarker(MarkerRequestDTO markerRequestDTO) {
         Marker marker = markerRepository.findById(markerRequestDTO.getId()).orElseThrow(null);
-        Category category = categoryRepository.findById(markerRequestDTO.getCategory());
+        Category category = categoryService.getCategory(markerRequestDTO.getCategory());
         marker.update(markerRequestDTO,category);
         markerRepository.save(marker);
     }
 
     public Marker getMarker(int id) {
        return markerRepository.findById(id).orElseThrow(null);
+    }
+
+    public List<MarkerDTO> getCategoryMarkers(int venue, int categoryId) {
+        List<Marker> markers;
+        Category category = categoryService.getCategory(categoryId);
+        if (venue == 0) {
+            markers = markerRepository.findByCategory(category);
+        } else {
+            markers = markerRepository.findByVenueAndCategory(venue, category);
+        }
+
+        return markers.stream()
+                .map(marker -> new MarkerDTO(
+                        marker.getId(),
+                        marker.getCategory().getName(),
+                        marker.getVenue(),
+                        marker.getTel(),
+                        marker.getName(),
+                        marker.getLatitude(),
+                        marker.getLongitude()
+                ))
+                .collect(Collectors.toList());
     }
 }

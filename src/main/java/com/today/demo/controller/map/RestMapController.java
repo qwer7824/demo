@@ -2,7 +2,10 @@ package com.today.demo.controller.map;
 
 import com.today.demo.dto.MarkerDTO;
 import com.today.demo.dto.Request.MarkerRequestDTO;
+import com.today.demo.entity.Category;
 import com.today.demo.entity.Marker;
+import com.today.demo.repository.CategoryRepository;
+import com.today.demo.repository.MarkerRepository;
 import com.today.demo.service.MarkerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,16 +13,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class RestMapController {
 
     private final MarkerService markerService;
+    private final MarkerRepository markerRepository;
+    private final CategoryRepository categoryRepository;
 
     @GetMapping("/map/marker/{venue}")
     public List<MarkerDTO> getMarkers(@PathVariable("venue") int venue) {
         return markerService.getMarkers(venue);
+    }
+
+    @GetMapping("/map/marker/{venue}/{category}")
+    public List<MarkerDTO> getCategoryMarkers(@PathVariable("venue") int venue, @PathVariable("category") int categoryId) {
+        return markerService.getCategoryMarkers(venue,categoryId);
     }
 
     @PostMapping("/admin/db/markerAdd")
