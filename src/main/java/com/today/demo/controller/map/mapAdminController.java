@@ -23,7 +23,6 @@ import java.util.List;
 @Controller
 public class mapAdminController {
 
-    private final MarkerRepository markerRepository;
     private final MarkerService markerService;
     private final CategoryService categoryService;
     @GetMapping("/admin/maps")
@@ -32,8 +31,7 @@ public class mapAdminController {
             @RequestParam(defaultValue = "10") int size,
             Model model
     ) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Marker> markerPage = markerRepository.findAll(pageable);
+        Page<Marker> markerPage = markerService.getAllMarker(page,size);
         List<Marker> DBMaps = markerPage.getContent();
         List<Category> DBCategory = categoryService.getCategory();
 

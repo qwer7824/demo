@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MarkerRepository extends JpaRepository<Marker, Long> {
+public interface MarkerRepository extends JpaRepository<Marker, Integer> {
     List<Marker> findByVenue(int venue);
 }

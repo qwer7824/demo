@@ -28,16 +28,14 @@ public class ActivityController {
 
     private final ActivityRedisTemplateService activityRedisTemplateService;
     private final ActivityService activityService;
-    private final ActivityRepository activityRepository;
 
     @GetMapping("/admin/activity")
     public String getAllActivities(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             Model model) {
-        Pageable pageable = PageRequest.of(page, size);
         List<Activity> RedisActivities = activityRedisTemplateService.findAll();
-        Page<Activity> activityPage = activityRepository.findAll(pageable);
+        Page<Activity> activityPage = activityService.getAllActivity(page,size);
         List<Activity> DBActivities = activityPage.getContent();
 
         int Count = RedisActivities.size();

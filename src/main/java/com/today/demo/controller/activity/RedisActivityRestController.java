@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 @RestController
 public class RedisActivityRestController {
 
-    private final ActivityRepository activityRepository;
     private final ActivityRedisTemplateService activityRedisTemplateService;
     private final ActivityService activityService;
 

@@ -32,7 +32,7 @@ public class MarkerService {
         markerRepository.save(marker);
     }
 
-    public void markerDelete(Long id) {
+    public void markerDelete(int id) {
         markerRepository.deleteById(id);
     }
 

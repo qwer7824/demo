@@ -5,6 +5,9 @@ import com.today.demo.entity.Activity;
 import com.today.demo.repository.ActivityRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -105,8 +108,9 @@ public class ActivityService {
         }
         return null;
     }
-    public List<Activity> allActivity(){
-        return activityRepository.findAll();
+    public Page<Activity> getAllActivity(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return activityRepository.findAll(pageable);
     }
     public void save() {
         List<Activity> activityList = activityRepository.findAll();
