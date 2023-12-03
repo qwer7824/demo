@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 @Getter
 public class MarkerRequestDTO {
+    private int id;
     private int category;
     private int venue;
     private String tel;

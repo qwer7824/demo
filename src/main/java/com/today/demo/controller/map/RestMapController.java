@@ -2,6 +2,7 @@ package com.today.demo.controller.map;
 
 import com.today.demo.dto.MarkerDTO;
 import com.today.demo.dto.Request.MarkerRequestDTO;
+import com.today.demo.entity.Marker;
 import com.today.demo.service.MarkerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,8 +29,19 @@ public class RestMapController {
     }
 
     @DeleteMapping("/admin/marker/db/{id}")
-    public ResponseEntity<String> deleteActivity(@PathVariable Long id) {
+    public ResponseEntity<String> deleteActivity(@PathVariable int id) {
         markerService.markerDelete(id);
         return ResponseEntity.ok("Marker DB with ID " + id + " has been deleted.");
     }
+
+    @GetMapping("/admin/map/db/{id}")
+    public Marker getMarker(@PathVariable("id") int id) {
+        return markerService.getMarker(id);
+    }
+
+    @PutMapping("/admin/map/db/{id}")
+    public void updateMarker(@RequestBody MarkerRequestDTO markerRequestDTO) {
+        markerService.updateMarker(markerRequestDTO);
+    }
+
 }

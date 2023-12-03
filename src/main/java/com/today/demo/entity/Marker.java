@@ -1,5 +1,6 @@
 package com.today.demo.entity;
 
+import com.today.demo.dto.Request.MarkerRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +29,15 @@ public class Marker {
     private double latitude;
 
     private double longitude;
+
+    public void update(MarkerRequestDTO markerRequestDTO , Category category) {
+        this.name = markerRequestDTO.getName();
+        this.tel = markerRequestDTO.getTel();
+        this.category = category;
+        this.venue = markerRequestDTO.getVenue();
+        this.latitude = markerRequestDTO.getLatitude();
+        this.longitude = markerRequestDTO.getLongitude();
+    }
 }
 
 

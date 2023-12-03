@@ -1,5 +1,6 @@
 package com.today.demo.entity;
 
+import com.today.demo.dto.CategoryDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,5 +21,9 @@ public class Category {
 
     private String name;
 
+
+    public void updateCategory(CategoryDTO categoryDTO){
+        this.name = categoryDTO.getName();
+    }
 
 }

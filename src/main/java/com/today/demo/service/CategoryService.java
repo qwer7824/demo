@@ -31,4 +31,9 @@ public class CategoryService {
     }
 
 
+    public void updateCategory(CategoryDTO categoryDTO) {
+        Category category = categoryRepository.findById(categoryDTO.getId());
+        category.updateCategory(categoryDTO);
+        categoryRepository.save(category);
+    }
 }
