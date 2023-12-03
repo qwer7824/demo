@@ -8,15 +8,18 @@
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d6c4c6c3f782007214fd49e572b5bde9&libraries=services"></script>
 </head>
 <script src="/js/admin/maps.js"></script>
+<script>
+
+</script>
 <body>
 <th:block th:replace="fragments/adminNav :: adminNavFragment"></th:block>
 <div class="container">
     <div class="double">
     <div class="menubar">
-        <button class="btn btn-dark" onclick="showModal()">지도 추가</button>
+        <button class="btn btn-dark" onclick="AddMapModal()">지도 추가</button>
     </div>
         <div class="menubar2">
-            <button class="btn btn-dark" onclick="showModal2()">카테고리 추가</button>
+            <button class="btn btn-dark" onclick="CategoryModal()">카테고리 추가</button>
         </div>
     </div>
     <div class="double">
@@ -34,7 +37,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="dbMaps : ${DBMaps}">
+                <tr th:each="dbMaps : ${DBMaps}" th:attr="onclick='editMapModal(\'' + ${dbMaps.id} + '\')'">
                     <td th:text="${dbMaps.id}"></td>
                     <td th:text="${dbMaps.category.name}"></td>
                     <td th:text="${dbMaps.venue == 1 ? '서울' : dbMaps.venue == 2 ? '경기' : dbMaps.venue == 3 ? '인천' : dbMaps.venue == 4 ? '강원' : dbMaps.venue == 5 ? '충북' : dbMaps.venue == 6 ? '충남' : dbMaps.venue == 7 ? '대전' : dbMaps.venue == 8 ? '경북' : dbMaps.venue == 9 ? '경남' : dbMaps.venue == 10 ? '부산' : dbMaps.venue == 11 ? '울산' : dbMaps.venue == 12 ? '대구' : dbMaps.venue == 13 ? '광주' : dbMaps.venue == 14 ? '전북' : dbMaps.venue == 15 ? '전남' : dbMaps.venue == 16 ? '제주' : ''}"></td>
@@ -75,7 +78,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="DbCategory : ${DBCategory}">
+                    <tr th:each="DbCategory : ${DBCategory}"  th:attr="onclick='CategoryModal(\'' + ${DbCategory.id} + '\', \'' + ${DbCategory.name} + '\')'">
                         <td th:text="${DbCategory.id}"></td>
                         <td th:text="${DbCategory.name}"></td>
                         <td>
@@ -94,6 +97,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addMapsModalLabel">Add Map</h5>
+                    <h5 class="modal-title" id="editMapsModalLabel">Edit Map</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -102,6 +106,7 @@
                     <!-- 추가 폼 -->
                     <form>
                         <div class="form-group">
+                            <input type="hidden" id="id" placeholder="id"/>
                             <input type="text" class="form-control" id="name" placeholder="Name"/>
                         </div>
                         <div class="form-group">
@@ -143,7 +148,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="addMapsButton()">Add</button>
+                    <button type="button" class="btn btn-primary" id="addMapButton" onclick="addMapsButton()">Add</button>
+                    <button type="button" class="btn btn-primary" id="editMapButton" onclick="editMapButton()">Edit</button>
                 </div>
             </div>
         </div>
@@ -154,8 +160,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+                    <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
+                        <input type="hidden" id="cid"/>
                     </button>
                 </div>
                 <div class="modal-body" style="text-align: center;">
@@ -168,7 +176,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="addCategoryButton()">Add</button>
+                    <button type="button" class="btn btn-primary" id="addCategoryButton" onclick="addCategoryButton()">Add</button>
+                    <button type="button" class="btn btn-primary" id="editCategoryButton" onclick="editCategoryButton()">Edit</button>
                 </div>
             </div>
         </div>

@@ -1,3 +1,4 @@
+
 function addMapsButton() {
     // DTO 객체 생성
     var dto = {
@@ -28,6 +29,36 @@ function addMapsButton() {
     $("#addMapsModal").modal("hide");
 }
 
+function editMapButton() {
+
+    var dto = {
+        id : $('#id').val(),
+        name: $("#name").val(),
+        category: $("#category").val(),
+        tel: $("#tel").val(),
+        venue: $("#venue").val(),
+        latitude: $("#latitude").val(),
+        longitude: $("#longitude").val()
+    };
+
+    // 서버로 Ajax 요청을 보내어 카테고리 업데이트 처리
+    $.ajax({
+        type: 'PUT',
+        url: '/admin/map/db/' + dto.id,
+        contentType: "application/json",
+        data: JSON.stringify(dto),
+        success: function(response) {
+            // 업데이트 성공 시 모달 창 닫기
+            $('#addMapsModal').modal('hide');
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            // 업데이트 실패 시 에러 처리
+            console.error(error);
+        }
+    });
+}
+
 function addCategoryButton() {
     // DTO 객체 생성
     var dto = {
@@ -56,51 +87,186 @@ function addCategoryButton() {
 function deleteDbMap(id) {
     const confirmDelete = confirm("삭제 하시겠습니까?");
 
-    fetch("/admin/marker/db/" + id, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => {
-            if (response.ok) {
+    if (confirmDelete) {
+        $.ajax({
+            url: "/admin/marker/db/" + id,
+            type: "DELETE",
+            contentType: "application/json",
+            success: function(response) {
                 location.reload();
-            } else {
-                throw new Error("Error: " + response.status);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: " + error);
             }
-        })
-        .catch(error => {
-            console.error(error);
         });
+    }
 }
 
 function deleteDbCategory(id) {
     const confirmDelete = confirm("삭제 하시겠습니까?");
 
-    fetch("/admin/category/db/" + id, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => {
-            if (response.ok) {
+    if (confirmDelete) {
+        $.ajax({
+            url: "/admin/category/db/" + id,
+            type: "DELETE",
+            contentType: "application/json",
+            success: function(response) {
                 location.reload();
-            } else {
-                throw new Error("Error: " + response.status);
+            },
+            error: function(xhr, status, error) {
+                alert('카테고리에 연결된 지역이 있습니다.');
+                console.error("Error: " + error);
             }
-        })
-        .catch(error => {
-            console.error(error);
         });
+    }
 }
 
-function showModal() {
+function editCategoryButton() {
+
+    var dto = {
+        id : $('#cid').val(),
+        name: $("#cname").val()
+    };
+
+    // 서버로 Ajax 요청을 보내어 카테고리 업데이트 처리
+    $.ajax({
+        type: 'PUT',
+        url: '/admin/category/db/' + dto.id,
+        contentType: "application/json",
+        data: JSON.stringify(dto),
+        success: function(response) {
+            // 업데이트 성공 시 모달 창 닫기
+            $('#addCategoryModal').modal('hide');
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            // 업데이트 실패 시 에러 처리
+            console.error(error);
+        }
+    });
+}
+
+function CategoryModal(categoryId, categoryName) {
+    const $cname = $('#cname');
+    const $cid = $('#cid');
+    const $addButton = $('#addCategoryButton');
+    const $editButton = $('#editCategoryButton');
+    const $addLabel = $('#addCategoryModalLabel');
+    const $editLabel = $('#editCategoryModalLabel');
+    const $addCategoryModal = $('#addCategoryModal');
+
+    $cname.val(categoryName);
+    $cid.val(categoryId);
+
+    const cidInput = document.getElementById("cid");
+
+    if (cidInput.value === "") {
+        $addButton.show();
+        $editButton.hide();
+        $addLabel.show();
+        $editLabel.hide();
+    } else {
+        $addButton.hide();
+        $editButton.show();
+        $addLabel.hide();
+        $editLabel.show();
+    }
+
+    $addCategoryModal.modal('show');
+
+    $addCategoryModal.on('hidden.bs.modal', function() {
+        $cname.val('');
+        $cid.val('');
+        cidInput.value = null;
+    });
+
+    $addCategoryModal.on('click', '[data-dismiss="modal"]', function() {
+        $cname.val('');
+        $cid.val('');
+        cidInput.value = null;
+    });
+}
+
+function editMapModal(id) {
+    const $addMapsModal = $('#addMapsModal');
+
+    $.ajax({
+        url: "/admin/map/db/" + id,
+        type: "GET",
+        success: function(response) {
+            var marker = response;
+
+            // 모달 창 열기
+            $('#addMapsModal').modal('show');
+
+            // 데이터 자동 채우기
+            $('#id').val(marker.id);
+            $('#name').val(marker.name);
+            $('#tel').val(marker.tel);
+            $('#venue').val(marker.venue);
+            $('#latitude').val(marker.latitude);
+            $('#longitude').val(marker.longitude);
+
+            // 카테고리 선택
+            var categoryId = marker.category.id; // 선택된 카테고리 ID
+            var categoryName = marker.category.name; // 선택된 카테고리 이름
+
+            // select 요소의 option을 탐색하여 선택
+            $('#category option').each(function() {
+                if ($(this).val() == categoryId) {
+                    $(this).prop('selected', true);
+                    return false; // 선택된 option을 찾았으므로 반복문 종료
+                }
+            });
+
+            // 선택된 카테고리 이름을 표시
+            $('#selectedCategory').text(categoryName);
+
+            // 추가 버튼과 레이블 처리
+            if (marker.id === "") {
+                $('#addMapButton').show();
+                $('#editMapButton').hide();
+                $('#addMapsModalLabel').show();
+                $('#editMapsModalLabel').hide();
+            } else {
+                $('#addMapButton').hide();
+                $('#editMapButton').show();
+                $('#addMapsModalLabel').hide();
+                $('#editMapsModalLabel').show();
+            }
+        },
+        error: function() {
+            // 에러 시 처리할 로직
+        }
+    });
+
+    $addMapsModal.on('hidden.bs.modal', function() {
+        $('#id').val('');
+        $('#name').val('');
+        $('#tel').val('');
+        $('#venue').val('');
+        $('#latitude').val('');
+        $('#longitude').val('');
+    });
+
+    $addMapsModal.on('click', '[data-dismiss="modal"]', function() {
+        $('#id').val('');
+        $('#name').val('');
+        $('#tel').val('');
+        $('#venue').val('');
+        $('#latitude').val('');
+        $('#longitude').val('');
+    });
+}
+
+function AddMapModal() {
+
+    $('#addMapButton').show();
+    $('#editMapButton').hide();
+    $('#addMapsModalLabel').show();
+    $('#editMapsModalLabel').hide();
+
     $('#addMapsModal').modal('show');
-}
-
-function showModal2() {
-    $('#addCategoryModal').modal('show');
 }
 
     window.onload = function(){
