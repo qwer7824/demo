@@ -18,9 +18,11 @@
 <th:block th:replace="fragments/navbar :: navbarFragment"></th:block>
 <th:block th:replace="fragments/mapNav :: mapNavFragment"></th:block>
 <div class="nav-bar">
-    <a class ="nav-item" onclick="location.reload();">전체</a>
-    <div class ="nav-item" th:each="category : ${categories}">
-        <a th:id="${category.id}" th:onclick="'fetchData(\'' + ${category.id} + '\')'" th:text="${category.name}"></a>
+    <div>
+        <a id="categoryAll" class ="category-item" onclick="location.reload();">전체</a>
+    </div>
+    <div class="" th:each="category : ${categories}">
+        <a class="category-item" th:id="${category.id}" th:onclick="'fetchData(\'' + ${category.id} + '\')'" th:text="${category.name}"></a>
     </div>
 </div>
 <div class="container">
@@ -46,6 +48,7 @@ window.onload = changeColor;
 </script>
 <script>
     $(document).ready(function() {
+        document.getElementById('categoryAll').classList.add('active');
         $.ajax({
             url: "/map/marker/2",
             method: "GET",
@@ -59,6 +62,14 @@ window.onload = changeColor;
         });
     });
     function fetchData(categoryId) {
+        var selectedCategory = document.getElementById(categoryId);
+        var previousCategories = document.querySelectorAll('.category-item.active');
+        // 이전에 선택된 카테고리 스타일 제거
+        previousCategories.forEach(function(previousCategory) {
+            previousCategory.classList.remove('active');
+        });
+        selectedCategory.classList.add('active');
+
         $.ajax({
             url: "/map/marker/2/" + categoryId,
             method: "GET",

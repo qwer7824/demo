@@ -27,6 +27,19 @@ display: flex;
     color: rgb(255 255 255 / 55%);
 }
 
+    .active {
+        color: white !important;
+    }
+
+    .category-item.active {
+        color: white !important;
+    }
+    .category-item{
+        margin:5px;
+        font-family: 'YEONGJUPunggiGinsengTTF';
+        color: rgb(255 255 255 / 55%);
+    }
+
 .nav-item{
     margin:5px;
     font-family: 'YEONGJUPunggiGinsengTTF';
