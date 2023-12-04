@@ -36,5 +36,29 @@ public class MapController {
         model.addAttribute("categories", categories);
         return "map/2";
     }
+    @GetMapping("/map/3")
+    public String map3View(Model model){
+        List<Category> categories = categoryService.getCategory();
+        model.addAttribute("categories", categories);
+        return "map/3";
+    }
+    @GetMapping("/map/4")
+    public String map4View(Model model){
+        List<Category> categories = categoryService.getCategory();
+        model.addAttribute("categories", categories);
+        return "map/4";
+    }
+    @GetMapping("/map/5")
+    public String map5View(Model model){
+        List<Category> categories = categoryService.getCategory();
+        model.addAttribute("categories", categories);
+        return "map/5";
+    }
+    @GetMapping("/map/6")
+    public String map6View(Model model){
+        List<Category> categories = categoryService.getCategory();
+        model.addAttribute("categories", categories);
+        return "map/6";
+    }
 
 }

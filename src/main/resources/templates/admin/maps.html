@@ -40,7 +40,7 @@
                 <tr th:each="dbMaps : ${DBMaps}" th:attr="onclick='editMapModal(\'' + ${dbMaps.id} + '\')'">
                     <td th:text="${dbMaps.id}"></td>
                     <td th:text="${dbMaps.category.name}"></td>
-                    <td th:text="${dbMaps.venue == 1 ? '서울' : dbMaps.venue == 2 ? '경기' : dbMaps.venue == 3 ? '인천' : dbMaps.venue == 4 ? '강원' : dbMaps.venue == 5 ? '충북' : dbMaps.venue == 6 ? '충남' : dbMaps.venue == 7 ? '대전' : dbMaps.venue == 8 ? '경북' : dbMaps.venue == 9 ? '경남' : dbMaps.venue == 10 ? '부산' : dbMaps.venue == 11 ? '울산' : dbMaps.venue == 12 ? '대구' : dbMaps.venue == 13 ? '광주' : dbMaps.venue == 14 ? '전북' : dbMaps.venue == 15 ? '전남' : dbMaps.venue == 16 ? '제주' : ''}"></td>
+                    <td th:text="${dbMaps.venue == 1 ? '수도권' : dbMaps.venue == 2 ? '강원도' : dbMaps.venue == 3 ? '충청도' : dbMaps.venue == 4 ? '전라도' : dbMaps.venue == 5 ? '경상도' : dbMaps.venue == 6 ? '제주도' : ''}"></td>
                     <td th:text="${dbMaps.name}"></td>
                     <td th:text="${dbMaps.tel}"></td>
                     <td>
@@ -119,22 +119,12 @@
                         </div>
                         <div class="form-group">
                             <select class="form-select" name="venue" id="venue">
-                                <option value="1">서울</option>
-                                <option value="2">경기</option>
-                                <option value="3">인천</option>
-                                <option value="4">강원</option>
-                                <option value="5">충북</option>
-                                <option value="6">충남</option>
-                                <option value="7">대전</option>
-                                <option value="8">경북</option>
-                                <option value="9">경남</option>
-                                <option value="10">부산</option>
-                                <option value="11">울산</option>
-                                <option value="12">대구</option>
-                                <option value="13">광주</option>
-                                <option value="14">전북</option>
-                                <option value="15">전남</option>
-                                <option value="16">제주</option>
+                                <option value="1">수도권</option>
+                                <option value="2">강원도</option>
+                                <option value="3">충청도</option>
+                                <option value="4">전라도</option>
+                                <option value="5">경상도</option>
+                                <option value="6">제주도</option>
                             </select>
                         </div>
                         <div class="form-group">
