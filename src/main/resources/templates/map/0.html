@@ -20,7 +20,7 @@
     <div>
         <a id="categoryAll" class ="category-item" onclick="location.reload();">전체</a>
     </div>
-    <div class="" th:each="category : ${categories}">
+    <div class="category-bar" th:each="category : ${categories}">
             <a class="category-item" th:id="${category.id}" th:onclick="'fetchData(\'' + ${category.id} + '\')'" th:text="${category.name}"></a>
     </div>
 </div>

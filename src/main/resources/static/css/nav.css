@@ -25,6 +25,9 @@ display: flex;
     border-top: solid 1px;
     border-top-color: #00000017;
     color: rgb(255 255 255 / 55%);
+
+    overflow: auto;
+    white-space: nowrap;
 }
 
     .active {
@@ -53,4 +56,9 @@ display: flex;
 a:hover {
     color: #ffffff;
     text-decoration: none;
+}
+
+.category-bar{
+    overflow: auto;
+    white-space: nowrap;
 }
