@@ -8,3 +8,5 @@
 - OpenAPI : BootStrap , Kakao Map Api
 - Library : Security , Lombok , Thymeleaf
 - DevOps : AWS EC2 , Docker , Jenkins
+
+test
