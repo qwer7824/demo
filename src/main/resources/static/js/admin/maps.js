@@ -1,7 +1,7 @@
 
 function addMapsButton() {
     // DTO 객체 생성
-    var dto = {
+    const dto = {
         name: $("#name").val(),
         category: $("#category").val(),
         tel: $("#tel").val(),
@@ -31,7 +31,7 @@ function addMapsButton() {
 
 function editMapButton() {
 
-    var dto = {
+    const dto = {
         id : $('#id').val(),
         name: $("#name").val(),
         category: $("#category").val(),
@@ -61,7 +61,7 @@ function editMapButton() {
 
 function addCategoryButton() {
     // DTO 객체 생성
-    var dto = {
+    const dto = {
         name: $("#cname").val()
     };
 
@@ -123,8 +123,8 @@ function deleteDbCategory(id) {
 
 function editCategoryButton() {
 
-    var dto = {
-        id : $('#cid').val(),
+    const dto = {
+        id: $('#cid').val(),
         name: $("#cname").val()
     };
 
@@ -208,8 +208,8 @@ function editMapModal(id) {
             $('#longitude').val(marker.longitude);
 
             // 카테고리 선택
-            var categoryId = marker.category.id; // 선택된 카테고리 ID
-            var categoryName = marker.category.name; // 선택된 카테고리 이름
+            const categoryId = marker.category.id; // 선택된 카테고리 ID
+            const categoryName = marker.category.name; // 선택된 카테고리 이름
 
             // select 요소의 option을 탐색하여 선택
             $('#category option').each(function() {
