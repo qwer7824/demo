@@ -1,5 +1,7 @@
 package com.today.demo.controller.activity;
 
+import com.today.demo.dto.ActivityDTO;
+import com.today.demo.dto.CategoryDTO;
 import com.today.demo.entity.Activity;
 import com.today.demo.service.ActivityService;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +32,15 @@ public class ActivityRestController {
     ) {
         Activity activity = activityService.addActivity(name, venue, capacity);
         return ResponseEntity.status(HttpStatus.CREATED).body(activity);
+    }
+
+    @PutMapping("/admin/activity/db/{id}")
+    public ResponseEntity<String> updateActivity(@RequestBody ActivityDTO activityDTO) {
+        activityService.updateActivity(activityDTO);
+        return ResponseEntity.ok("Category DB with ID " + activityDTO.getId() + " has been updated.");
+    }
+    @GetMapping("/admin/activity/db/{id}")
+    public Activity getActivity(@PathVariable("id") int id) {
+        return activityService.getActivity(id);
     }
 }

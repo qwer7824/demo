@@ -1,5 +1,6 @@
 package com.today.demo.service;
 
+import com.today.demo.dto.ActivityDTO;
 import com.today.demo.redisService.ActivityRedisTemplateService;
 import com.today.demo.entity.Activity;
 import com.today.demo.repository.ActivityRepository;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -125,5 +127,15 @@ public class ActivityService {
                 .toList();
 
         activityDtoList.forEach(activityRedisTemplateService::save);
+    }
+
+    public void updateActivity(ActivityDTO activityDTO) {
+            Activity activity = activityRepository.findById(activityDTO.getId()).orElseThrow(null);
+            activity.update(activityDTO);
+            activityRepository.save(activity);
+        }
+
+    public Activity getActivity(int id) {
+        return activityRepository.findById(id).orElseThrow(null);
     }
 }

@@ -13,7 +13,7 @@
 <div class="container">
     <div class="double">
     <div class="menubar">
-        <button class="btn btn-dark" onclick="showModal()">DB 추가</button>
+        <button class="btn btn-dark" onclick="AddActivityModal()">DB 추가</button>
         <button class="btn btn-dark" onclick="saveActivities()">Redis 등록</button>
     </div>
     <div class="menubar2" style="display: flex;justify-content: space-between;">
@@ -34,7 +34,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="dbActivity : ${DBActivities}">
+                <tr th:each="dbActivity : ${DBActivities}" th:attr="onclick='editActivityModal(\'' + ${dbActivity.id} + '\')'">
                     <td th:text="${dbActivity.id}"></td>
                     <td th:text="${dbActivity.name}"></td>
                     <td th:text="${dbActivity.venue == 1 ? '실내' : dbActivity.venue == 2 ? '실외' : ''}"></td>
@@ -71,7 +71,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addActivityModalLabel">Add Activity</h5>
+                <h5 class="modal-title" id="addActivityModalLabel">Add Map</h5>
+                <h5 class="modal-title" id="editActivityModalLabel">Edit Map</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -80,10 +81,11 @@
                 <!-- 활동 추가 폼 -->
                 <form>
                     <div class="form-group">
+                        <label for="id"></label><input type="hidden" class="form-control" id="id" placeholder="id"/>
                         <label for="name"></label><input type="text" class="form-control" id="name" placeholder="Name"/>
                     </div>
                     <div class="form-group">
-                        <div class="btn-group" role="group" aria-label="venue button group" id="venue">
+                        <div class="btn-group" role="group" aria-label="venue button group" id="venue" name="venue">
                             <input type="radio" class="btn-check" name="venue" id="venue0" value="0" autocomplete="off" checked>
                             <label class="btn btn-outline-primary" for="venue0">전체</label>
 
@@ -95,7 +97,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="btn-group" role="group" aria-label="capacity group" id="capacity">
+                        <div class="btn-group" role="group" aria-label="capacity group" id="capacity" name="capacity">
                             <input type="radio" class="btn-check" name="capacity" id="capacity0" value="0" autocomplete="off" checked>
                             <label class="btn btn-outline-primary" for="capacity0">전체</label>
 
@@ -116,7 +118,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="addActivityButton()">Add</button>
+                <button type="button" class="btn btn-primary" id="addActivityButton" onclick="addActivityButton()">Add</button>
+                <button type="button" class="btn btn-primary" id="editActivityButton" onclick="editActivityButton()">Edit</button>
             </div>
         </div>
     </div>
@@ -124,9 +127,6 @@
 <script src="https://code.jquery.com/jquery-3.5.0.js" defer></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
 <script>
-    function showModal() {
-    $('#addActivityModal').modal('show');
-}
 </script>
 </body>
 </html>

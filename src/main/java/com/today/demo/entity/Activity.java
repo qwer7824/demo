@@ -1,5 +1,7 @@
 package com.today.demo.entity;
 
+import com.today.demo.dto.ActivityDTO;
+import com.today.demo.dto.Request.MarkerRequestDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,4 +26,10 @@ public class Activity {
 
     // 인원
     private int capacity;
+
+    public void update(ActivityDTO activityDTO) {
+        this.name = activityDTO.getName();
+        this.venue = activityDTO.getVenue();
+        this.capacity = activityDTO.getCapacity();
+    }
 }
