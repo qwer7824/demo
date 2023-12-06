@@ -44,7 +44,7 @@ function editMapButton() {
     // 서버로 Ajax 요청을 보내어 카테고리 업데이트 처리
     $.ajax({
         type: 'PUT',
-        url: '/admin/map/db/' + dto.id,
+        url: '/admin/marker/db/' + dto.id,
         contentType: "application/json",
         data: JSON.stringify(dto),
         success: function(response) {
@@ -191,7 +191,7 @@ function editMapModal(id) {
     const $addMapsModal = $('#addMapsModal');
 
     $.ajax({
-        url: "/admin/map/db/" + id,
+        url: "/admin/marker/db/" + id,
         type: "GET",
         success: function(response) {
             var marker = response;

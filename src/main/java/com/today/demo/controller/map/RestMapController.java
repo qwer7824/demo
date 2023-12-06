@@ -45,12 +45,12 @@ public class RestMapController {
         return ResponseEntity.ok("Marker DB with ID " + id + " has been deleted.");
     }
 
-    @GetMapping("/admin/map/db/{id}")
+    @GetMapping("/admin/marker/db/{id}")
     public Marker getMarker(@PathVariable("id") int id) {
         return markerService.getMarker(id);
     }
 
-    @PutMapping("/admin/map/db/{id}")
+    @PutMapping("/admin/marker/db/{id}")
     public void updateMarker(@RequestBody MarkerRequestDTO markerRequestDTO) {
         markerService.updateMarker(markerRequestDTO);
     }
