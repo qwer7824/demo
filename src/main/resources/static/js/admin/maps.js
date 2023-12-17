@@ -21,7 +21,7 @@ function addMapsButton() {
             location.reload();
         },
         error: function(xhr, status, error) {
-            // 에러 시 처리할 로직
+            alert("유효성 검사에 실패하였습니다.");
         }
     });
 
@@ -53,7 +53,7 @@ function editMapButton() {
             location.reload();
         },
         error: function(xhr, status, error) {
-            // 업데이트 실패 시 에러 처리
+            alert("유효성 검사에 실패하였습니다.");
             console.error(error);
         }
     });
@@ -76,7 +76,7 @@ function addCategoryButton() {
             location.reload();
         },
         error: function(xhr, status, error) {
-            // 에러 시 처리할 로직
+            alert("유효성 검사에 실패하였습니다.");
         }
     });
 
@@ -140,7 +140,7 @@ function editCategoryButton() {
             location.reload();
         },
         error: function(xhr, status, error) {
-            // 업데이트 실패 시 에러 처리
+            alert("유효성 검사에 실패하였습니다.");
             console.error(error);
         }
     });

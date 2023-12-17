@@ -1,5 +1,6 @@
 package com.today.demo.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,7 @@ import lombok.Setter;
 public class ActivityDTO {
     private int id;
 
+    @NotBlank
     // 활동 이름
     private String name;
 

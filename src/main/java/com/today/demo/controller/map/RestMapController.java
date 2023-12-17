@@ -2,18 +2,18 @@ package com.today.demo.controller.map;
 
 import com.today.demo.dto.MarkerDTO;
 import com.today.demo.dto.Request.MarkerRequestDTO;
-import com.today.demo.entity.Category;
 import com.today.demo.entity.Marker;
 import com.today.demo.repository.CategoryRepository;
 import com.today.demo.repository.MarkerRepository;
 import com.today.demo.service.MarkerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,7 +34,14 @@ public class RestMapController {
     }
 
     @PostMapping("/admin/db/markerAdd")
-    public ResponseEntity<String> addMarker(@RequestBody MarkerRequestDTO dto) {
+    public ResponseEntity<String> addMarker(@Valid @RequestBody MarkerRequestDTO dto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            // 유효성 검사 실패 시 처리
+            String errorMessage = bindingResult.getFieldError().getDefaultMessage();
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
+
+        // 유효성 검사 통과 시 처리
         markerService.markerAdd(dto);
         return new ResponseEntity<>("Marker added successfully", HttpStatus.OK);
     }
@@ -51,8 +58,14 @@ public class RestMapController {
     }
 
     @PutMapping("/admin/marker/db/{id}")
-    public void updateMarker(@RequestBody MarkerRequestDTO markerRequestDTO) {
+    public ResponseEntity<String> updateMarker(@Valid @RequestBody MarkerRequestDTO markerRequestDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            // 유효성 검사 실패 시 처리
+            String errorMessage = bindingResult.getFieldError().getDefaultMessage();
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
         markerService.updateMarker(markerRequestDTO);
+        return new ResponseEntity<>("Marker edited successfully", HttpStatus.OK);
     }
 
 }

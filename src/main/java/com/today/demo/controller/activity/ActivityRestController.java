@@ -4,11 +4,13 @@ import com.today.demo.dto.ActivityDTO;
 import com.today.demo.dto.CategoryDTO;
 import com.today.demo.entity.Activity;
 import com.today.demo.service.ActivityService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -25,17 +27,23 @@ public class ActivityRestController {
     }
 
     @PostMapping("/admin/activity/db/add")
-    public ResponseEntity<Activity> addActivity(
-            @RequestParam String name,
-            @RequestParam int venue,
-            @RequestParam int capacity
-    ) {
-        Activity activity = activityService.addActivity(name, venue, capacity);
-        return ResponseEntity.status(HttpStatus.CREATED).body(activity);
+    public ResponseEntity<String> addActivity(@Valid @RequestBody ActivityDTO activityDTO , BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            // 유효성 검사 실패 시 처리
+            String errorMessage = bindingResult.getFieldError().getDefaultMessage();
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
+        activityService.addActivity(activityDTO);
+        return new ResponseEntity<>("Activity added successfully", HttpStatus.OK);
     }
 
     @PutMapping("/admin/activity/db/{id}")
-    public ResponseEntity<String> updateActivity(@RequestBody ActivityDTO activityDTO) {
+    public ResponseEntity<String> updateActivity(@Valid @RequestBody ActivityDTO activityDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            // 유효성 검사 실패 시 처리
+            String errorMessage = bindingResult.getFieldError().getDefaultMessage();
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
         activityService.updateActivity(activityDTO);
         return ResponseEntity.ok("Category DB with ID " + activityDTO.getId() + " has been updated.");
     }

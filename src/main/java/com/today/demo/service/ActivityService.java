@@ -66,12 +66,12 @@ public class ActivityService {
     }
 
 
-    public Activity addActivity(String name, int venue, int capacity) {
-        if (venue == 0 && capacity == 0) {
+    public Activity addActivity(ActivityDTO activityDTO) {
+        if (activityDTO.getVenue() == 0 && activityDTO.getCapacity() == 0) {
             for (int i = 1; i <= 2; i++) {
                 for (int j = 1; j <= 4; j++) {
                     Activity activity = Activity.builder()
-                            .name(name)
+                            .name(activityDTO.getName())
                             .venue(i)
                             .capacity(j)
                             .build();
@@ -79,21 +79,21 @@ public class ActivityService {
                     log.info("addActivity venue{} capacity{}", i, j);
                 }
             }
-        } else if (venue == 0) {
+        } else if (activityDTO.getVenue() == 0) {
             for (int i = 1; i <= 2; i++) {
                 Activity activity = Activity.builder()
-                        .name(name)
+                        .name(activityDTO.getName())
                         .venue(i)
-                        .capacity(capacity)
+                        .capacity(activityDTO.getCapacity())
                         .build();
                 activityRepository.save(activity);
                 log.info("addActivity venue{}", i);
             }
-        } else if (capacity == 0) {
+        } else if (activityDTO.getCapacity() == 0) {
             for (int i = 1; i <= 4; i++) {
                 Activity activity = Activity.builder()
-                        .name(name)
-                        .venue(venue)
+                        .name(activityDTO.getName())
+                        .venue(activityDTO.getVenue())
                         .capacity(i)
                         .build();
                 log.info("addActivity capacity{}", i);
@@ -101,9 +101,9 @@ public class ActivityService {
             }
         } else {
             Activity activity = Activity.builder()
-                    .name(name)
-                    .venue(venue)
-                    .capacity(capacity)
+                    .name(activityDTO.getName())
+                    .venue(activityDTO.getVenue())
+                    .capacity(activityDTO.getCapacity())
                     .build();
             log.info("addActivity");
             return activityRepository.save(activity);

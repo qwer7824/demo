@@ -70,29 +70,27 @@ function deleteAllActivities() {
 }
 
 function addActivityButton() {
-    const name = $("#name").val();
-    const venue = $("input[name='venue']:checked").val();
-    const capacity = $("input[name='capacity']:checked").val();
 
-    // 활동 추가 AJAX 요청
+    const activityDTO = {
+        name: $("#name").val(),
+        venue: $("input[name='venue']:checked").val(),
+        capacity: $("input[name='capacity']:checked").val()
+    };
+
     $.ajax({
-        type: "POST",
         url: "/admin/activity/db/add",
-        data: {
-            name: name,
-            venue: venue,
-            capacity: capacity
-        },
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(activityDTO),
         success: function(response) {
             console.log("활동이 추가되었습니다:", response);
             location.reload();
-            // 추가된 활동에 대한 처리 로직을 작성합니다.
         },
-        error: function(error) {
-            console.error("활동 추가 실패:", error);
-            // 실패한 경우에 대한 처리 로직을 작성합니다.
+        error: function(xhr, status, error) {
+            alert("유효성 검사에 실패하였습니다.");
         }
     });
+
 
     // 모달 창 닫기
     $("#addActivityModal").modal("hide");
@@ -118,7 +116,7 @@ function editActivityButton() {
             location.reload();
         },
         error: function(xhr, status, error) {
-            // 업데이트 실패 시 에러 처리
+            alert("유효성 검사에 실패하였습니다.");
             console.error(error);
         }
     });
