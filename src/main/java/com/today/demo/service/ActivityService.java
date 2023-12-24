@@ -4,6 +4,7 @@ import com.today.demo.dto.ActivityDTO;
 import com.today.demo.redisService.ActivityRedisTemplateService;
 import com.today.demo.entity.Activity;
 import com.today.demo.repository.ActivityRepository;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -130,12 +131,12 @@ public class ActivityService {
     }
 
     public void updateActivity(ActivityDTO activityDTO) {
-            Activity activity = activityRepository.findById(activityDTO.getId()).orElseThrow(null);
-            activity.update(activityDTO);
+            Activity activity = activityRepository.findById(activityDTO.getId()).orElseThrow(() -> new IllegalArgumentException("해당 ID의 활동을 찾을 수 없습니다."));
+        activity.update(activityDTO);
             activityRepository.save(activity);
         }
 
     public Activity getActivity(int id) {
-        return activityRepository.findById(id).orElseThrow(null);
+        return activityRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 ID의 활동을 찾을 수 없습니다."));
     }
 }

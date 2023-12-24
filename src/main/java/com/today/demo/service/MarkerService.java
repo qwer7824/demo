@@ -59,14 +59,14 @@ public class MarkerService {
     }
 
     public void updateMarker(MarkerRequestDTO markerRequestDTO) {
-        Marker marker = markerRepository.findById(markerRequestDTO.getId()).orElseThrow(null);
+        Marker marker = markerRepository.findById(markerRequestDTO.getId()).orElseThrow(()-> new IllegalArgumentException("해당 ID의 마커를 찾을 수 없습니다."));
         Category category = categoryService.getCategory(markerRequestDTO.getCategory());
         marker.update(markerRequestDTO,category);
         markerRepository.save(marker);
     }
 
     public Marker getMarker(int id) {
-       return markerRepository.findById(id).orElseThrow(null);
+       return markerRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 ID의 마커를 찾을 수 없습니다."));
     }
 
     public List<MarkerDTO> getCategoryMarkers(int venue, int categoryId) {
