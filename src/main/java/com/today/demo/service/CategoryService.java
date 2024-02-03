@@ -6,6 +6,7 @@ import com.today.demo.entity.Category;
 import com.today.demo.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    @Transactional
     public void addCategory(CategoryRequestDTO categoryDTO){
         Category category = Category.builder()
                 .name(categoryDTO.getName())
@@ -26,11 +28,13 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
+    @Transactional
     public void detectCategory(int id){
         categoryRepository.deleteById(id);
     }
 
 
+    @Transactional
     public void updateCategory(CategoryDTO categoryDTO) {
         Category category = categoryRepository.findById(categoryDTO.getId());
         category.updateCategory(categoryDTO);

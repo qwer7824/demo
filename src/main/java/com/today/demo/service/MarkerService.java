@@ -4,13 +4,13 @@ import com.today.demo.dto.MarkerDTO;
 import com.today.demo.dto.Request.MarkerRequestDTO;
 import com.today.demo.entity.Category;
 import com.today.demo.entity.Marker;
-import com.today.demo.repository.CategoryRepository;
 import com.today.demo.repository.MarkerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +22,7 @@ public class MarkerService {
     private final MarkerRepository markerRepository;
     private final CategoryService categoryService;
 
+    @Transactional
     public void markerAdd(MarkerRequestDTO dto){
         Category category = categoryService.getCategory(dto.getCategory());
         Marker marker = Marker.builder()
@@ -35,6 +36,7 @@ public class MarkerService {
         markerRepository.save(marker);
     }
 
+    @Transactional
     public void markerDelete(int id) {
         markerRepository.deleteById(id);
     }
@@ -57,7 +59,7 @@ public class MarkerService {
         Pageable pageable = PageRequest.of(page, size);
         return markerRepository.findAll(pageable);
     }
-
+    @Transactional
     public void updateMarker(MarkerRequestDTO markerRequestDTO) {
         Marker marker = markerRepository.findById(markerRequestDTO.getId()).orElseThrow(()-> new IllegalArgumentException("해당 ID의 마커를 찾을 수 없습니다."));
         Category category = categoryService.getCategory(markerRequestDTO.getCategory());

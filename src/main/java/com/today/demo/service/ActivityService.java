@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,11 +63,13 @@ public class ActivityService {
     }
 
 
+    @Transactional
     public void delete(int id) {
         activityRepository.deleteById(id);
     }
 
 
+    @Transactional
     public Activity addActivity(ActivityDTO activityDTO) {
         if (activityDTO.getVenue() == 0 && activityDTO.getCapacity() == 0) {
             for (int i = 1; i <= 2; i++) {
@@ -115,6 +118,7 @@ public class ActivityService {
         Pageable pageable = PageRequest.of(page, size);
         return activityRepository.findAll(pageable);
     }
+    @Transactional
     public void save() {
         List<Activity> activityList = activityRepository.findAll();
 
@@ -132,7 +136,7 @@ public class ActivityService {
 
     public void updateActivity(ActivityDTO activityDTO) {
             Activity activity = activityRepository.findById(activityDTO.getId()).orElseThrow(() -> new IllegalArgumentException("해당 ID의 활동을 찾을 수 없습니다."));
-        activity.update(activityDTO);
+            activity.update(activityDTO);
             activityRepository.save(activity);
         }
 
