@@ -2,9 +2,7 @@ package com.today.demo.controller;
 
 
 import com.today.demo.service.ActivityService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

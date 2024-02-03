@@ -3,8 +3,6 @@ package com.today.demo.controller.map;
 import com.today.demo.dto.MarkerDTO;
 import com.today.demo.dto.Request.MarkerRequestDTO;
 import com.today.demo.entity.Marker;
-import com.today.demo.repository.CategoryRepository;
-import com.today.demo.repository.MarkerRepository;
 import com.today.demo.service.MarkerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +18,6 @@ import java.util.List;
 public class RestMapController {
 
     private final MarkerService markerService;
-    private final MarkerRepository markerRepository;
-    private final CategoryRepository categoryRepository;
-
     @GetMapping("/map/marker/{venue}")
     public List<MarkerDTO> getMarkers(@PathVariable("venue") int venue) {
         return markerService.getMarkers(venue);
