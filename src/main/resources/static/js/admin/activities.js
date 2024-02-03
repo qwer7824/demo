@@ -55,7 +55,7 @@ function deleteAllActivities() {
     const confirmDelete = confirm("전체 삭제 하시겠습니까?");
 
     $.ajax({
-        url: "/admin/activity/db/" + id,
+        url: "/admin/activity/redis/deleteAll",
         method: "DELETE",
         headers: {
             "Content-Type": "application/json"
