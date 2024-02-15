@@ -1,6 +1,7 @@
 package com.today.demo.service;
 
 import com.today.demo.dto.MarkerDTO;
+import com.today.demo.dto.Request.LocationDTO;
 import com.today.demo.dto.Request.MarkerRequestDTO;
 import com.today.demo.entity.Category;
 import com.today.demo.entity.Marker;
@@ -23,7 +24,7 @@ public class MarkerService {
     private final CategoryService categoryService;
 
     @Transactional
-    public void markerAdd(MarkerRequestDTO dto){
+    public int markerAdd(MarkerRequestDTO dto){
         Category category = categoryService.getCategory(dto.getCategory());
         Marker marker = Marker.builder()
                 .name(dto.getName())
@@ -34,6 +35,7 @@ public class MarkerService {
                 .longitude(dto.getLongitude())
                 .build();
         markerRepository.save(marker);
+        return marker.getId();
     }
 
     @Transactional
@@ -91,5 +93,9 @@ public class MarkerService {
                         marker.getLongitude()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    public Marker getLatitudeAndLongitude(double Latitude, double Longitude){
+        return markerRepository.findByLatitudeAndLongitude(Latitude, Longitude);
     }
 }
