@@ -18,9 +18,10 @@ import java.util.Collection;
 @Getter
 @NoArgsConstructor
 @Builder
-public class Member implements UserDetails {
+public class Member extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private Long id;
 
     @Column(unique = true)
@@ -28,12 +29,15 @@ public class Member implements UserDetails {
 
     private String pw;
 
+    private String email;
+
     private String roles;
 
-    private Member(Long id, String userid, String pw, String roleUser) {
+    private Member(Long id, String userid, String pw,String email, String roleUser) {
         this.id = id;
         this.userid = userid;
         this.pw = pw;
+        this.email = email;
         this.roles = roleUser;
     }
 
@@ -41,9 +45,9 @@ public class Member implements UserDetails {
         return Member.builder()
                 .userid(memberJoinDto.getUserid())
                 .pw(passwordEncoder.encode(memberJoinDto.getPw()))  //암호화처리
+                .email(memberJoinDto.getEmail())
                 .roles("USER")
                 .build();
-
     }
 
     @Override
