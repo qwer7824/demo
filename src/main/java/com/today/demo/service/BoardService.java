@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,7 +41,7 @@ public class BoardService {
         Marker marker = markerService.getMarker(boardRequestDTO.getMarker());
         Optional<Member> member = memberService.findOne(userId);
 
-        Member resolvedMember = member.orElseThrow(null);
+        Member resolvedMember = member.orElseThrow();
 
         if(!image.isEmpty()) {
            String storedFileName = s3Uploader.upload(image,"images");
@@ -56,7 +57,7 @@ public class BoardService {
         }
     }
     public List<Board> getAllTop9(){
-       return boardRepository.findTop9ByOrderByLikeCountDesc();
+       return boardRepository.findTop9ByOrderByLikeCountDescCreatedAtDesc();
     }
 
     public Board getDetail(int boardId){
@@ -84,20 +85,27 @@ public class BoardService {
         } else {
             // venueId와 categoryId가 모두 0이 아닌 경우 venueId와 categoryId에 해당하는 게시판을 조회
             List<Marker> markers = markerRepository.findByVenue(venueId);
-            System.out.println(markers);
 
             List<Board> boardList = new ArrayList<>();
             for (Marker marker : markers) {
                 List<Board> boards = boardRepository.findByMarkerIdAndCategoryId(marker.getId(), categoryId, PageRequest.of(page, size)).getContent();
                 boardList.addAll(boards);
             }
-            System.out.println(boardList);
             return mapBoardListToDTOList(boardList);
         }
     }
 
+    public List<BoardResponseDTO> getMemberBoardList(String userId,int page , int size){
 
-    private List<BoardResponseDTO> mapBoardListToDTOList(List<Board> boardList) {
+        Member member = memberService.findOne(userId).orElseThrow(null);
+
+        List<Board> boardList = boardRepository.findByMember(member,PageRequest.of(page, size)).getContent();
+
+        return mapBoardListToDTOList(boardList);
+    }
+
+
+    public List<BoardResponseDTO> mapBoardListToDTOList(List<Board> boardList) {
         return boardList.stream()
                 .map(board -> modelMapper.map(board, BoardResponseDTO.class))
                 .collect(Collectors.toList());

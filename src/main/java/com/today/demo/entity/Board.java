@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
@@ -22,7 +25,7 @@ public class Board extends BaseEntity {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(name = "member_b_id"))
     private Member member;
 
     private String content;
@@ -31,16 +34,19 @@ public class Board extends BaseEntity {
     private int likeCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "cate_id", foreignKey = @ForeignKey(name = "cate_b_id"))
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "marker_id")
+    @JoinColumn(name = "marker_id", foreignKey = @ForeignKey(name = "marker_b_id"))
     private Marker marker;
 
     private String address;
 
     private String imgUrl;
+
+    @OneToMany(mappedBy = "board")
+    private List<Heart> hearts = new ArrayList<>();
 
     public void addCount(){
         this.likeCount += 1;

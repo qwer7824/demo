@@ -4,17 +4,13 @@ import com.today.demo.dto.BoardResponseDTO;
 import com.today.demo.dto.Request.LocationDTO;
 import com.today.demo.dto.Request.MarkerRequestDTO;
 import com.today.demo.dto.Request.BoardRequestDTO;
-import com.today.demo.entity.Category;
-import com.today.demo.entity.Marker;
-import com.today.demo.entity.Board;
-import com.today.demo.repository.BoardRepository;
-import com.today.demo.repository.MarkerRepository;
+import com.today.demo.entity.*;
 import com.today.demo.service.CategoryService;
+import com.today.demo.service.HeartService;
 import com.today.demo.service.MarkerService;
 import com.today.demo.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,9 +31,7 @@ public class BoardController {
     private final BoardService boardService;
     private final CategoryService categoryService;
     private final MarkerService markerService;
-    private final BoardRepository boardRepository;
-    private final MarkerRepository markerRepository;
-    private final ModelMapper modelMapper;
+    private final HeartService heartService;
 
     @GetMapping("/board")
     public String get(Model model){
@@ -61,9 +52,15 @@ public class BoardController {
     }
 
     @GetMapping("/board/{boardId}")
-    public String detail(Model model,@PathVariable int boardId){
+    public String detail(Principal principal,Model model,@PathVariable int boardId){
         Board board = boardService.getDetail(boardId);
+        boolean heart = false; // 기본값으로 false 설정
+
+        if (principal != null) {
+            heart = heartService.heartCheck(principal.getName(), boardId);
+        }
         model.addAttribute("board",board);
+        model.addAttribute("heart",heart);
         return "board/detail";
     }
 
@@ -71,7 +68,7 @@ public class BoardController {
     @GetMapping("/post")
     public String post(Model model, Principal principal){
         if(principal == null){
-            return "login";
+            return "member/login";
         }
 
         List<Category> category = categoryService.getCategory();
@@ -110,7 +107,7 @@ public class BoardController {
 
     @PostMapping("/newMarker") // 새로운 마커 생성
     @ResponseBody
-    public ResponseEntity<?> newMarker(@Valid @RequestBody MarkerRequestDTO dto, BindingResult bindingResult) {
+    public ResponseEntity<?> newMarker(@Valid @RequestBody MarkerRequestDTO dto, BindingResult bindingResult,Principal principal) {
         if (bindingResult.hasErrors()) {
             // 유효성 검사 실패 시 처리
             String errorMessage = bindingResult.getFieldError().getDefaultMessage();
@@ -123,7 +120,7 @@ public class BoardController {
         }
 
         // 유효성 검사 통과 시 처리
-        int markerId = markerService.markerAdd(dto);
+        int markerId = markerService.markerAdd(dto,principal.getName());
         return new ResponseEntity<>(markerId, HttpStatus.OK);
     }
 
