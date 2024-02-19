@@ -23,14 +23,51 @@ spring:
     url: jdbc:mariadb://localhost:3306/today
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
-  redis:
-    host: localhost
-    port: 6379
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     show-sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
+cloud:
+  aws:
+    s3:
+      bucket: ${AWS_BUCKET_KEY}
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+mail:
+  smtp:
+    auth: true
+    starttls:
+      required: true
+      enable: true
+    socketFactory:
+      class: javax.net.ssl.SSLSocketFactory
+      fallback: false
+    port: 465
+    auth-code-expiration-millis: 1800000  # 30 * 60 * 1000 == 30분
+
+
+AdminMail:
+  id: ${MAIL_ID}
+  password: ${MAIL_PW}
+
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
 ---
 
 spring:
