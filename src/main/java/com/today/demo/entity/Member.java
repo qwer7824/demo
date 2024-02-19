@@ -3,6 +3,7 @@ package com.today.demo.entity;
 import com.today.demo.dto.MemberJoinDto;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,12 +12,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Member extends BaseEntity implements UserDetails {
     @Id
@@ -32,6 +37,15 @@ public class Member extends BaseEntity implements UserDetails {
     private String email;
 
     private String roles;
+
+    @OneToMany(mappedBy = "member")
+    private List<Marker> members = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Heart> hearts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Board> boards = new ArrayList<>();
 
     private Member(Long id, String userid, String pw,String email, String roleUser) {
         this.id = id;

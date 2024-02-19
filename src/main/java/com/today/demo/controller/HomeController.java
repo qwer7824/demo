@@ -23,15 +23,4 @@ public class HomeController {
         model.addAttribute("activities",activities);
         return "main";
     }
-
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login";
-    }
-
-    @GetMapping("/join")
-    public String joinPage() {
-        return "join";
-    }
-
 }

@@ -8,4 +8,6 @@ import lombok.Setter;
 public class MemberJoinDto {
     private String userid;
     private String pw;
+    private String email;
+    private String authCode;
 }
