@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,9 +18,16 @@ import java.util.List;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cate_id")
     private int id;
 
     private String name;
+
+    @OneToMany(mappedBy = "category")
+    private List<Marker> markers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "category")
+    private List<Board> boards = new ArrayList<>();
 
 
     public void updateCategory(CategoryDTO categoryDTO){
