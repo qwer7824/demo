@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
@@ -22,11 +25,11 @@ public class Marker extends BaseEntity{
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "cate_id", foreignKey = @ForeignKey(name = "cate_m_id"))
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(name = "member_m_id"))
     private Member member;
 
     private int venue;
@@ -38,6 +41,9 @@ public class Marker extends BaseEntity{
     private double latitude;
 
     private double longitude;
+
+    @OneToMany(mappedBy = "marker")
+    private List<Board> boards = new ArrayList<>();
 
     public void update(MarkerRequestDTO markerRequestDTO , Category category) {
         this.name = markerRequestDTO.getName();

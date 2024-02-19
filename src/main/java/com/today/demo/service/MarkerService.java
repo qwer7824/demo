@@ -5,7 +5,9 @@ import com.today.demo.dto.Request.LocationDTO;
 import com.today.demo.dto.Request.MarkerRequestDTO;
 import com.today.demo.entity.Category;
 import com.today.demo.entity.Marker;
+import com.today.demo.entity.Member;
 import com.today.demo.repository.MarkerRepository;
+import com.today.demo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,12 +24,15 @@ public class MarkerService {
 
     private final MarkerRepository markerRepository;
     private final CategoryService categoryService;
+    private final MemberRepository memberRepository;
 
     @Transactional
-    public int markerAdd(MarkerRequestDTO dto){
+    public int markerAdd(MarkerRequestDTO dto,String userId){
         Category category = categoryService.getCategory(dto.getCategory());
+        Member member = memberRepository.findByUserid(userId).orElseThrow(null);
         Marker marker = Marker.builder()
                 .name(dto.getName())
+                .member(member)
                 .category(category)
                 .tel(dto.getTel())
                 .venue(dto.getVenue())

@@ -2,6 +2,7 @@ package com.today.demo.repository;
 
 import com.today.demo.entity.Category;
 import com.today.demo.entity.Marker;
+import com.today.demo.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.yaml.snakeyaml.error.Mark;
@@ -18,4 +19,5 @@ public interface MarkerRepository extends JpaRepository<Marker, Integer> {
 
     Marker findByLatitudeAndLongitude(double latitude,double longitude);
 
+    List<Marker> findByMember(Member member);
 }

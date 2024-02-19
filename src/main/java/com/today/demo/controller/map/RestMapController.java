@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -29,7 +30,7 @@ public class RestMapController {
     }
 
     @PostMapping("/admin/db/markerAdd")
-    public ResponseEntity<String> addMarker(@Valid @RequestBody MarkerRequestDTO dto, BindingResult bindingResult) {
+    public ResponseEntity<String> addMarker(@Valid @RequestBody MarkerRequestDTO dto, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             // 유효성 검사 실패 시 처리
             String errorMessage = bindingResult.getFieldError().getDefaultMessage();
@@ -37,7 +38,7 @@ public class RestMapController {
         }
 
         // 유효성 검사 통과 시 처리
-        markerService.markerAdd(dto);
+        markerService.markerAdd(dto,principal.getName());
         return new ResponseEntity<>("Marker added successfully", HttpStatus.OK);
     }
 
