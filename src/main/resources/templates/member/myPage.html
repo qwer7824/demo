@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>오늘 뭐하지 ?</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nav-footer.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nav.css}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">  <!-- Core theme CSS (includes Bootstrap)-->
+</head>
+<script>
+
+</script>
+<style>
+
+    .active{
+        background-color: seagreen !important;
+    }
+
+    .card-text{
+        color: #888888;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-bottom:0;
+        width: 250px;
+    }
+    .card-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 250px;
+    }
+    .card-body{
+        text-align: -webkit-center;
+        margin-bottom: 10px;
+        color: black;
+    }
+    .card-l{
+        margin: 5px;
+    }
+    .row{
+        text-align: center;
+    }
+    .location-color{
+        color : dodgerblue;
+        font-size: 14px;
+    }
+
+    @media screen and (max-width: 768px) {
+        /* 모바일에 사용될 스트일 시트를 여기에 작성합니다. */
+        .card-title{
+            font-size: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 130px;
+        }
+        .card-text{
+            font-size: 9px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 150px;
+        }
+        .card-type{
+            font-size: 10px;
+            width: 60px;
+        }
+        .card-img-top{
+            height: 100px;
+        }
+        .card-l{
+            font-size: 10px;
+            margin: 5px;
+        }
+        .row{
+            text-align: center;
+        }
+    }
+
+
+    a { text-decoration:none !important }
+    a:hover { text-decoration:none !important }
+    p { text-decoration:none !important }
+    p:hover { text-decoration:none !important }
+    h4 { text-decoration:none !important }
+    h4:hover { text-decoration:none !important }
+
+
+</style>
+<script>
+
+    function changeColor() {
+        var link1 = document.getElementById('active-link4');
+        var link2 = document.getElementById('nav-slot4');
+        link1.classList.add('active');
+        link2.classList.add('active');
+    }
+    window.onload = changeColor;
+
+    let heartPage = 0;
+    let boardPage = 0;
+    function heartClick() {
+
+        const userId = $("#userId").text();
+
+        const url = '/member/heart/' + userId+ '?page=' + heartPage;
+
+        $.ajax({
+            url: url, // 생성한 URL을 사용합니다.
+            method: 'GET',
+            success: function(response) {
+                let haert = document.getElementById("haert");
+                let board = document.getElementById("board");
+                haert.classList.add("active");
+                board.classList.remove("active");
+
+                $('#tabView').empty(); // 기존 목록 초기화
+
+                response.forEach(function(item) {
+                    var createdAt = item.createdAt.split(' ')[0]; // 날짜 부분만 추출합니다.
+
+                    var card = '<div class="col">' +
+                        '<a href="/board/' + item.id + '">' +
+                        '<img src="' + item.imgUrl + '" class="card-img-top rounded" alt="">' +
+                        '<div class="card-body">' +
+                        '<span class="card-text card-type">' + item.memberUserid + '</span>' +
+                        '<span class="card-l card-type">' + "|" + '</span>' +
+                        '<span class="card-text card-type">' + createdAt + '</span>' +
+                        '<p class="card-text location-color">' + '<i class="bi bi-geo-alt"></i>' + item.address + '</p>' +
+                        '<p class="card-title">' + item.content + '</p>' +
+                        '<p class="card-text">' + '<i class="bi bi-heart"></i>' + item.likeCount + '</p>' +
+                        '</div>' +
+                        '</div>';
+                    $('#tabView').append(card);
+
+                });
+                let totalCount = response.length;
+                HeartPagination(totalCount);
+            },
+            error: function() {
+                // 데이터를 가져오는 도중에 오류가 발생한 경우의 처리 코드
+            }
+        });
+    }
+    function myBoardClick() {
+        const userId = $("#userId").text();
+
+        const url = '/member/board/' + userId + '?page=' + boardPage;
+
+        $.ajax({
+            url: url, // 생성한 URL을 사용합니다.
+            method: 'GET',
+            success: function(response) {
+                let haert = document.getElementById("haert");
+                let board = document.getElementById("board");
+                haert.classList.remove("active");
+                board.classList.add("active");
+
+                $('#tabView').empty(); // 기존 목록 초기화
+
+                response.forEach(function(item) {
+                    var createdAt = item.createdAt.split(' ')[0]; // 날짜 부분만 추출합니다.
+
+                    var card = '<div class="col">' +
+                        '<a href="/board/' + item.id + '">' +
+                        '<img src="' + item.imgUrl + '" class="card-img-top rounded" alt="">' +
+                        '<div class="card-body">' +
+                        '<span class="card-text card-type">' + item.memberUserid + '</span>' +
+                        '<span class="card-l card-type">' + "|" + '</span>' +
+                        '<span class="card-text card-type">' + createdAt + '</span>' +
+                        '<p class="card-text location-color">' + '<i class="bi bi-geo-alt"></i>' + item.address + '</p>' +
+                        '<p class="card-title">' + item.content + '</p>' +
+                        '<p class="card-text">' + '<i class="bi bi-heart"></i>' + item.likeCount + '</p>' +
+                        '</div>' +
+                        '</div>';
+                    $('#tabView').append(card);
+
+                });
+                let totalCount = response.length;
+                BoardPagination(totalCount);
+
+            },
+            error: function() {
+                // 데이터를 가져오는 도중에 오류가 발생한 경우의 처리 코드
+            }
+        });
+    }
+
+    function HeartPagination(totalCount) {
+
+        var pagination = $('#pagination');
+        pagination.empty();
+
+        if (heartPage > 0) {
+            // 이전 페이지 버튼
+            var previousButton = '<button class="btn btn-outline-success me-2" onclick="goToHeartPreviousPage()">Previous</button>';
+            pagination.append(previousButton);
+        }
+        if(totalCount > 9){
+            // 다음 페이지 버튼
+            var nextButton = '<button class="btn btn-outline-success" onclick="goToHeartNextPage(' + totalCount +')">Next</button>';
+            pagination.append(nextButton);
+        }
+    }
+
+    function BoardPagination(totalCount) {
+
+        var pagination = $('#pagination');
+        pagination.empty();
+
+        if (boardPage > 0) {
+            // 이전 페이지 버튼
+            var previousButton = '<button class="btn btn-outline-success me-2" onclick="goToBoardPreviousPage()">Previous</button>';
+            pagination.append(previousButton);
+        }
+        if(totalCount > 9){
+            // 다음 페이지 버튼
+            var nextButton = '<button class="btn btn-outline-success" onclick="goToBoardNextPage(' + totalCount +')">Next</button>';
+            pagination.append(nextButton);
+        }
+    }
+    function goToHeartPreviousPage() {
+        if (heartPage > 0) {
+            heartPage--;
+            heartClick();
+        }
+    }
+    function goToBoardPreviousPage() {
+        if (boardPage > 0) {
+            boardPage--;
+            myBoardClick();
+        }
+    }
+
+    function goToHeartNextPage(totalCount) {
+        if(totalCount > 9){
+            heartPage++;
+            heartClick();
+        }
+    }
+    function goToBoardNextPage(totalCount) {
+        if(totalCount > 9){
+            boardPage++;
+            myBoardClick();
+        }
+    }
+</script>
+<body>
+<th:block th:replace="~{fragments/navbar :: navbarFragment}"></th:block>
+ <div class="container mb-5">
+     <div class="card text-center mb-1 mt-1">
+         <th:block th:each="member : ${member}">
+             <div class="">
+                 <i class="bi bi-person"></i>
+                 <span id="userId" th:text="${member.userid}"></span>
+             </div>
+             <div class="">
+                 <i class="bi bi-envelope"></i>
+                 <span id="userEmail" th:text="${member.email}"></span>
+             </div>
+         </th:block>
+     </div>
+     <ul class="nav nav-tabs mb-1">
+            <li class="nav-item">
+                <a id="haert" class="nav-link" onclick="heartClick()">좋아요</a>
+            </li>
+            <li class="nav-item">
+                <a id="board" class="nav-link" onclick="myBoardClick()">내 게시글</a>
+            </li>
+        </ul>
+        <div id="tabView" class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3"></div>
+     <div class="text-center" id="pagination"></div>
+
+ </div>
+
+<th:block th:replace="~{fragments/footer :: footerFragment}"></th:block>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+</body>
+</html>

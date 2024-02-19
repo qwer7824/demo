@@ -12,24 +12,6 @@ function saveActivities() {
     });
 }
 
-function deleteRedisActivity(id) {
-    const confirmDelete = confirm("삭제하시겠습니까?");
-
-    $.ajax({
-        url: "/admin/activity/redis/" + id,
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        success: function(data) {
-            location.reload();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.error("Error: " + textStatus);
-        }
-    });
-}
-
 function deleteDbActivity(id) {
     const confirmDelete = confirm("삭제 하시겠습니까?");
 

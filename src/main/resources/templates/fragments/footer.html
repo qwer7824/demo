@@ -7,8 +7,10 @@
 <body>
     <th:block th:fragment="footerFragment">
         <div class="nav-footer">
-            <div id="nav-slot" class="nav-slot" onclick="location.href ='/'">할일 추천</div>
-            <div id="nav-slot2" class="nav-slot" onclick="location.href ='/map/0'">할일 지도</div>
+            <a class="footer-slot" href="/"><i id="nav-slot" class="bi bi-house-door nav-link" style="font-size: 27px;"></i></a>
+            <a class="footer-slot" href="/map/0"><i id="nav-slot2" class="bi bi-geo-alt nav-link" href="/map/0" style="font-size: 27px;"></i></a>
+            <a class="footer-slot" href="/board"> <i id="nav-slot3" class="bi bi-chat-right-text nav-link" href="/board" style="font-size: 27px;"></i></a>
+            <a class="footer-slot" href="/myPage"><i id="nav-slot4"class="bi bi-person nav-link" style="font-size: 27px;"></i></a>
         </div>
     </th:block>
 </body>

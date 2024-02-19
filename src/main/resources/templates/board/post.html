@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>오늘 뭐하지 ?</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nav-footer.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nav.css}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">  <!-- Core theme CSS (includes Bootstrap)-->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.25.3/antd.min.css"/>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d6c4c6c3f782007214fd49e572b5bde9&libraries=services"></script>
+</head>
+<script>
+    function changeColor() {
+        var link1 = document.getElementById('active-link3');
+        var link2 = document.getElementById('nav-slot3');
+        link1.classList.add('active');
+        link2.classList.add('active');
+    }
+    window.onload = changeColor;
+
+    window.onload = function(){
+        document.getElementById("address_kakao").addEventListener("click", function(){
+            //카카오 지도 발생
+            new daum.Postcode({
+                oncomplete: function(data) { //선택시 입력값 세팅
+                    document.getElementById("address_kakao").value = data.address; // 주소 넣기
+                    document.getElementById("address2").value = data.address; // 주소 넣기
+                    convertAddressToCoordinate(data.address);
+                    selectRegionByAddress(data.address);
+                }
+            }).open();
+        });
+    }
+    // 주소를 경도와 위도 값으로 변환하는 함수
+    function convertAddressToCoordinate(address) {
+        // 주소-좌표 변환 객체 생성
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        // 주소로 좌표 변환
+        geocoder.addressSearch(address, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var latitude = result[0].y; // 위도
+                var longitude = result[0].x; // 경도
+
+                // 변환된 좌표로 원하는 작업 수행
+                document.getElementById("latitude").value = latitude; // 주소 넣기
+                document.getElementById("longitude").value = longitude; // 주소 넣기
+                locationSearch(latitude,longitude);
+            } else {
+                console.log("주소-좌표 변환 실패");
+            }
+        });
+    }
+    function locationSearch(latitude,longitude) {
+        // DTO 객체 생성
+        const dto = {
+            latitude: latitude,
+            longitude: longitude
+        };
+
+        // AJAX 요청
+        $.ajax({
+            url: "/location",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(dto),
+            success: function(response) {
+                document.getElementById("marker").value = response; // 주소 넣기
+            },
+            error: function(xhr, status, error) {
+                handleResponse(xhr);
+            }
+        });
+    }
+    function handleResponse(response) {
+        if (response.status === 404) {
+            $('#createModal').modal('show');
+            document.getElementById("marker").value = null;
+        }
+        if (response.status === 400) {
+            alert("유효성 검사 실패");
+        }
+    }
+    function selectRegionByAddress(address) {
+        // 지역에 따른 옵션 값 매핑
+        let regionMapping = {
+            "서울": "1",
+            "경기": "1",
+            "인천": "1",
+            "강원": "2",
+            "충북": "3",
+            "충남": "3",
+            "전북": "4",
+            "전남": "4",
+            "경남": "5",
+            "경북": "5",
+            "제주": "6"
+        };
+        // 주소에서 지역 추출
+        let region = address.substr(0, 2);
+        // 매핑된 옵션 값 가져오기
+        let regionCode = regionMapping[region];
+        document.getElementById("venue").value = regionCode;
+    }
+
+    function newMarkerButton() {
+        // DTO 객체 생성
+        const dto = {
+            name: $("#name").val(),
+            category: $("#category").val(),
+            tel: $("#tel").val(),
+            venue: $("#venue").val(),
+            latitude: $("#latitude").val(),
+            longitude: $("#longitude").val()
+        };
+
+        // AJAX 요청
+        $.ajax({
+            url: "/newMarker",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(dto),
+            success: function(response) {
+                $("#createModal").modal("hide");
+                document.getElementById("marker").value = response;
+            },
+            error: function(xhr, status, error) {
+                alert("유효성 검사에 실패하였습니다.");
+            }
+        });
+
+    }
+    function addButton() {
+        // 파일 업로드 인풋 필드에서 선택된 파일 가져오기
+        const fileInput = $("#itemImgFile")[0];
+        const file = fileInput.files[0];
+
+        // 파일이 선택되었는지 확인
+        if (!file) {
+            // 파일이 선택되지 않은 경우에 대한 처리
+            alert("이미지가 선택되지 않았습니다.")
+            return;
+        }
+
+        // FormData 객체 생성
+        const formData = new FormData();
+
+        // DTO 객체 생성
+        formData.append("member", $("#userId").val());
+        formData.append("category", $("#category").val());
+        formData.append("content", $("#content").val());
+        formData.append("marker", $("#marker").val());
+        formData.append("address", $("#address_kakao").val());
+        formData.append("image", file);
+
+        // AJAX 요청
+        $.ajax({
+            url: "/post",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: formData,
+            dataType: 'text',
+            success: function(response,status) {
+                alert(response);
+                location.href = '/board';
+                },
+            error: function(xhr, status, error) {
+                handleResponse(xhr);
+            }
+        });
+    }
+    function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('preview').src = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+  } else {
+    document.getElementById('preview').src = "";
+  }
+}
+
+</script>
+<style>
+    #body-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #preview{
+  width: 100%;
+  height: 300px;
+  object-fit: fill;
+  margin-bottom: 15px;
+    }
+    .col-12{
+        margin-bottom: 15px;
+    }
+</style>
+<body>
+<th:block th:replace="~{fragments/navbar :: navbarFragment}"></th:block>
+<div id="body-wrapper">
+        <form enctype="multipart/form-data" class="my-4">
+            <input type="hidden" id="marker"/>
+            <img id="preview" />
+            <div class="input-group mb-3">
+                <input type="file" class="form-control" id="itemImgFile" onchange="readURL(this);">
+              </div>
+            <div class="col-12">
+            <input type="text" class="form-control" id="content" placeholder="content"/>
+            </div>
+            <div class="col-12">
+                <input type="text" id="address_kakao" name="address" class="form-control" placeholder="address" readonly>
+            </div>
+            <div class="d-grid gap-2 col-12 mx-auto">
+            <button type="button" class="btn btn-outline-success" id="addMapButton" onclick="addButton()">작성</button>
+            </div>
+        </form>
+
+        <!-- 모달 창 -->
+        <div id="createModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createModalLabel">새로운 명소를 알려주세요 !</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-12">
+                        <select class="form-select" name="category" id="category">
+                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                        </select>
+                        </div>
+                        <input type="hidden" id="venue"/>
+                        <div class="col-12">
+                        <input type="text" class="form-control" id="name" placeholder="Name"/>
+                        </div>
+                        <div class="col-12">
+                        <input type="text" class="form-control" id="tel" placeholder="Tel"/>
+                        </div>
+                        <div class="col-12">
+                        <input type="text" id="address2" name="address" class="form-control" placeholder="address" readonly>
+                        </div>
+                            <input type="hidden" id="latitude"/>
+                        <input type="hidden" id="longitude"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="newMarkerButton()">생성</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<th:block th:replace="~{fragments/footer :: footerFragment}"></th:block>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <meta name="description" content=""/>
+  <meta name="author" content=""/>
+  <title>오늘 뭐하지 ?</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/nav-footer.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/nav.css}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">  <!-- Core theme CSS (includes Bootstrap)-->
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
+<style>
+  #body-wrapper {
+    display: flex;
+    justify-content: center;
+    height: 80vh;
+  }
+  #container{
+    max-width: 1200px;
+    text-align-last: center;
+  }
+  .col-md{
+    display: flex; flex-direction: row; margin: 10px; text-align:center;
+  }
+  .card-img-top{
+    width: 90%;
+    margin-top: 15px;
+  }
+  .carousel-indicators{
+    margin-bottom : 0rem;
+  }
+ .carousel-indicators [data-bs-target]{
+   background-color : green;
+ }
+ .boardCard{
+   border: #d3d3d3 1px solid;
+   border-radius: 30px;
+   margin: 10px;
+ }
+ .card-text{
+   color: #888888;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   margin-bottom:0;
+   width: 300px;
+ }
+  .card-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 250px;
+  }
+  .card-body{
+    text-align: -webkit-center;
+    margin-bottom: 10px;
+    color: black;
+  }
+  .card-l{
+    margin: 5px;
+  }
+  .row{
+    text-align: center;
+  }
+  .location-color{
+    color : dodgerblue;
+    font-size: 14px;
+  }
+
+  @media screen and (max-width: 768px) {
+    /* 모바일에 사용될 스트일 시트를 여기에 작성합니다. */
+    .card-title{
+      font-size: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 60px;
+    }
+    .card-text{
+      font-size: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 105px;
+    }
+    .card-type{
+      font-size: 10px;
+      width: 60px;
+    }
+    .card-img-top{
+      height: 100px;
+    }
+    .col-md{
+      margin: 5px;
+    }
+    .boardCard{
+      margin: 3px;
+    }
+    .carousel-indicators{
+      margin-bottom : -1rem;
+    }
+    .card-l{
+      font-size: 10px;
+           margin: 5px;
+    }
+    .row{
+      text-align: center;
+    }
+    #pagination{
+      padding-bottom: 60px;
+    }
+  }
+
+
+
+  a { text-decoration:none !important }
+  a:hover { text-decoration:none !important }
+  p { text-decoration:none !important }
+  p:hover { text-decoration:none !important }
+  h4 { text-decoration:none !important }
+  h4:hover { text-decoration:none !important }
+</style>
+<body>
+<th:block th:replace="~{fragments/navbar :: navbarFragment}"></th:block>
+<div id="body-wrapper">
+  <div id="container">
+
+
+    <p class="fw-bold" style="font-size: 20px; text-align: center">요즘 핫한</p>
+    <div id="AllBoard" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#AllBoard" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#AllBoard" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#AllBoard" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="col-md">
+            <th:block th:if="${board != null}" th:each="subBoard : ${board.subList(0, 3)}">
+              <div class="boardCard">
+                <a th:href="'/board/' +${subBoard.id}" class="text-dark">
+                  <img th:src="${subBoard.imgUrl}" class="card-img-top" th:alt="${subBoard.getContent()}">
+                  <div class="card-body">
+                    <h4 class="card-title" th:text="${subBoard.marker.name}"></h4>
+                    <p class="card-text" th:text="${subBoard.content}"></p>
+                  </div>
+                </a>
+              </div>
+            </th:block>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="col-md">
+            <th:block th:if="${board != null}" th:each="subBoard : ${board.subList(3, 6)}">
+              <div class="boardCard">
+                <a th:href="'/board/' +${subBoard.id}" class="text-dark">
+                  <img th:src="${subBoard.imgUrl}" class="card-img-top" th:alt="${subBoard.getContent()}">
+                  <div class="card-body">
+                    <h4 class="card-title" th:text="${subBoard.marker.name}"></h4>
+                    <p class="card-text" th:text="${subBoard.content}"></p>
+                  </div>
+                </a>
+              </div>
+            </th:block>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="col-md">
+            <th:block th:if="${board != null}" th:each="subBoard : ${board.subList(6, 9)}">
+              <div class="boardCard">
+                <a th:href="'/board/' +${subBoard.id}" class="text-dark">
+                  <img th:src="${subBoard.imgUrl}" class="card-img-top" th:alt="${subBoard.getContent()}">
+                  <div class="card-body">
+                    <h4 class="card-title" th:text="${subBoard.marker.name}"></h4>
+                    <p class="card-text" th:text="${subBoard.content}"></p>
+                  </div>
+                </a>
+              </div>
+            </th:block>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#AllBoard" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#AllBoard" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+    <hr>
+    <a href="/post" class="btn btn-outline-success">글쓰기</a>
+    <hr>
+
+    <div class="d-flex flex-column align-items-cente mx-1 my-2">
+    <div class="btn-group my-2" role="group" aria-label="paldo" style="margin-top: 40px">
+      <input type="radio" class="btn-check" name="btnradio" id="all" value="0" autocomplete="off" checked>
+      <label class="btn btn-outline-success" for="all">전체</label>
+
+      <input type="radio" class="btn-check" name="btnradio" id="sudo" value="1" autocomplete="off">
+      <label class="btn btn-outline-success" for="sudo">수도</label>
+
+      <input type="radio" class="btn-check" name="btnradio" id="gang" value="2" autocomplete="off">
+      <label class="btn btn-outline-success" for="gang">강원</label>
+
+      <input type="radio" class="btn-check" name="btnradio" id="cung" value="3" autocomplete="off">
+      <label class="btn btn-outline-success" for="cung">충청</label>
+
+      <input type="radio" class="btn-check" name="btnradio" id="jen" value="4" autocomplete="off">
+      <label class="btn btn-outline-success" for="jen">전라</label>
+
+      <input type="radio" class="btn-check" name="btnradio" id="gung" value="5" autocomplete="off">
+      <label class="btn btn-outline-success" for="gung">경상</label>
+
+      <input type="radio" class="btn-check" name="btnradio" id="jeju" value="6" autocomplete="off">
+      <label class="btn btn-outline-success" for="jeju">제주</label>
+    </div>
+    <div class="btn-group" role="group" aria-label="butt">
+      <input type="radio" class="btn-check" name="cate" id="cateAll" value="0" autocomplete="off" onclick="handleAnchorClick()" checked>
+      <label class="btn btn-outline-success" for="cateAll">전체</label>
+      <th:block th:each="category : ${categories}">
+        <input type="radio" class="btn-check" name="cate" th:id="${category.id}" th:value="${category.id}" autocomplete="off" onclick="handleAnchorClick()">
+        <label class="btn btn-outline-success" th:for="${category.id}" th:text="${category.name}"></label>
+      </th:block>
+    </div>
+    </div>
+
+    <div class="row gx-0 mt-3">
+      <!-- 여기에 데이터가 동적으로 추가될 부분 -->
+    </div>
+    <div id="pagination"></div>
+
+
+
+</div>
+</div>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</body>
+<th:block th:replace="~{fragments/footer :: footerFragment}"></th:block>
+
+<script>
+
+  function changeColor() {
+    var link1 = document.getElementById('active-link3');
+    var link2 = document.getElementById('nav-slot3');
+    link1.classList.add('active');
+    link2.classList.add('active');
+  }
+  window.onload = changeColor;
+
+  let currentPage = 0; // 현재 페이지 번호를 변수로 선언합니다.
+
+  $(document).ready(function() {
+    handleAnchorClick(0);
+  });
+  function handleAnchorClick() {
+    const btnradioId = $('input[name="btnradio"]:checked').attr('value'); // 선택된 btnradio의 id 값을 가져옵니다.
+    const categoryId = $('input[name="cate"]:checked').attr('value'); // 선택된 btnradio의 id 값을 가져옵니다.
+
+    const url = '/board/' + btnradioId + '/' + categoryId + '?page=' + currentPage;
+
+    $.ajax({
+      url: url, // 생성한 URL을 사용합니다.
+      method: 'GET',
+      success: function(response) {
+        $('.row').empty(); // 기존 목록 초기화
+
+        response.forEach(function(item) {
+          var createdAt = item.createdAt.split(' ')[0]; // 날짜 부분만 추출합니다.
+
+          var card = '<div class="col-4">' +
+                  '<a href="/board/' + item.id + '">' +
+                  '<img src="' + item.imgUrl + '" class="card-img-top rounded" alt="">' +
+                  '<div class="card-body">' +
+                  '<span class="card-text card-type">' + item.memberUserid + '</span>' +
+                  '<span class="card-l card-type">' + "|" + '</span>' +
+                  '<span class="card-text card-type">' + createdAt + '</span>' +
+                  '<p class="card-text location-color">' + '<i class="bi bi-geo-alt"></i>' + item.address + '</p>' +
+                  '<p class="card-title">' + item.content + '</p>' +
+                  '<p class="card-text">' + '<i class="bi bi-heart"></i>' + item.likeCount + '</p>' +
+                  '</div>' +
+                  '</div>';
+          $('.row').append(card);
+
+        });
+
+        let totalCount = response.length;
+        renderPagination(totalCount);
+
+      },
+      error: function() {
+        // 데이터를 가져오는 도중에 오류가 발생한 경우의 처리 코드
+      }
+    });
+  }
+
+  function renderPagination(totalCount) {
+
+    var pagination = $('#pagination');
+    pagination.empty();
+
+    if (currentPage > 0) {
+      // 이전 페이지 버튼
+      var previousButton = '<button class="btn btn-outline-success me-2" onclick="goToPreviousPage()">Previous</button>';
+      pagination.append(previousButton);
+    }
+    if(totalCount > 9){
+      // 다음 페이지 버튼
+      var nextButton = '<button class="btn btn-outline-success" onclick="goToNextPage(' + totalCount +')">Next</button>';
+      pagination.append(nextButton);
+    }
+  }
+
+  function goToPreviousPage() {
+    if (currentPage > 0) {
+      currentPage--;
+      handleAnchorClick();
+    }
+  }
+
+  function goToNextPage(totalCount) {
+    if(totalCount > 9){
+      currentPage++;
+      handleAnchorClick();
+    }
+  }
+</script>
+</html>

@@ -5,6 +5,12 @@
     font-style: normal;
 }
 
+    .footer-slot{
+        width: 100%;
+        color: black;
+    }
+
+
 .nav-footer {
   display: none;
 }
