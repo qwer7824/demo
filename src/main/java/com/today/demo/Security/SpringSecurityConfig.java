@@ -30,8 +30,8 @@ public class SpringSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                        .requestMatchers("/admin/**","/redis/**","/join").hasRole("ADMIN")
-                        .requestMatchers("/","/map/**","/search","/login","/css/**", "/js/**","/map/marker/**").permitAll()
+                        .requestMatchers("/admin/**","/redis/**").hasRole("ADMIN")
+                        .requestMatchers("/post","/**","/map/**","/search","/login","/css/**", "/js/**","/map/marker/**","/join").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
@@ -39,7 +39,7 @@ public class SpringSecurityConfig {
                         .loginProcessingUrl("/login-process")
                         .usernameParameter("userid")
                         .passwordParameter("pw")
-                        .defaultSuccessUrl("/admin/maps", true)
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .logout(withDefaults());
