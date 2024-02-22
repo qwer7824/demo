@@ -27,8 +27,10 @@
     display: flex; flex-direction: row; margin: 10px; text-align:center;
   }
   .card-img-top{
-    width: 90%;
+    width: 350px;
+    height: 250px;
     margin-top: 15px;
+    object-fit: contain;
   }
   .carousel-indicators{
     margin-bottom : 0rem;
@@ -92,7 +94,8 @@
       width: 60px;
     }
     .card-img-top{
-      height: 100px;
+      width: 30vw;
+      height: 15vh;
     }
     .col-md{
       margin: 5px;
@@ -139,11 +142,11 @@
       </div>
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <div class="col-md">
+          <div class="col-md justify-content-center">
             <th:block th:if="${board != null}" th:each="subBoard : ${board.subList(0, 3)}">
               <div class="boardCard">
                 <a th:href="'/board/' +${subBoard.id}" class="text-dark">
-                  <img th:src="${subBoard.imgUrl}" class="card-img-top" th:alt="${subBoard.getContent()}">
+                  <img th:src="${subBoard.boardImgDtoList.get(0).getImgUrl()}" class="card-img-top" th:alt="${subBoard.getContent()}">
                   <div class="card-body">
                     <h4 class="card-title" th:text="${subBoard.marker.name}"></h4>
                     <p class="card-text" th:text="${subBoard.content}"></p>
@@ -154,11 +157,11 @@
           </div>
         </div>
         <div class="carousel-item">
-          <div class="col-md">
+          <div class="col-md justify-content-center">
             <th:block th:if="${board != null}" th:each="subBoard : ${board.subList(3, 6)}">
               <div class="boardCard">
                 <a th:href="'/board/' +${subBoard.id}" class="text-dark">
-                  <img th:src="${subBoard.imgUrl}" class="card-img-top" th:alt="${subBoard.getContent()}">
+                  <img th:src="${subBoard.boardImgDtoList.get(0).getImgUrl()}" class="card-img-top" th:alt="${subBoard.getContent()}">
                   <div class="card-body">
                     <h4 class="card-title" th:text="${subBoard.marker.name}"></h4>
                     <p class="card-text" th:text="${subBoard.content}"></p>
@@ -169,11 +172,11 @@
           </div>
         </div>
         <div class="carousel-item">
-          <div class="col-md">
+          <div class="col-md justify-content-center">
             <th:block th:if="${board != null}" th:each="subBoard : ${board.subList(6, 9)}">
               <div class="boardCard">
                 <a th:href="'/board/' +${subBoard.id}" class="text-dark">
-                  <img th:src="${subBoard.imgUrl}" class="card-img-top" th:alt="${subBoard.getContent()}">
+                  <img th:src="${subBoard.boardImgDtoList.get(0).getImgUrl()}" class="card-img-top" th:alt="${subBoard.getContent()}">
                   <div class="card-body">
                     <h4 class="card-title" th:text="${subBoard.marker.name}"></h4>
                     <p class="card-text" th:text="${subBoard.content}"></p>
@@ -279,7 +282,7 @@
 
           var card = '<div class="col-4">' +
                   '<a href="/board/' + item.id + '">' +
-                  '<img src="' + item.imgUrl + '" class="card-img-top rounded" alt="">' +
+                  '<img src="' + item.boardImgDtoList[0].imgUrl + '" class="card-img-top rounded" alt="">' +
                   '<div class="card-body">' +
                   '<span class="card-text card-type">' + item.memberUserid + '</span>' +
                   '<span class="card-l card-type">' + "|" + '</span>' +

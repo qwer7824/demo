@@ -138,14 +138,27 @@
 
     }
     function addButton() {
-        // 파일 업로드 인풋 필드에서 선택된 파일 가져오기
-        const fileInput = $("#itemImgFile")[0];
-        const file = fileInput.files[0];
+        var fileList = []; // 파일들을 담을 배열
 
+        var fileInputs = [
+            document.getElementById('itemImgFile1'),
+            document.getElementById('itemImgFile2'),
+            document.getElementById('itemImgFile3'),
+            document.getElementById('itemImgFile4'),
+            document.getElementById('itemImgFile5')
+        ];
+
+        fileInputs.forEach(function(fileInput) {
+            if (fileInput.files) {
+                for (var i = 0; i < fileInput.files.length; i++) {
+                    fileList.push(fileInput.files[i]);
+                }
+            }
+        });
         // 파일이 선택되었는지 확인
-        if (!file) {
+        if (fileList.length === 0) {
             // 파일이 선택되지 않은 경우에 대한 처리
-            alert("이미지가 선택되지 않았습니다.")
+            alert("이미지가 선택되지 않았습니다.");
             return;
         }
 
@@ -158,7 +171,9 @@
         formData.append("content", $("#content").val());
         formData.append("marker", $("#marker").val());
         formData.append("address", $("#address_kakao").val());
-        formData.append("image", file);
+        fileList.forEach(function(file, index) {
+            formData.append("image", file); // 'image' 파트의 이름을 고정으로 "image"로 설정
+        });
 
         // AJAX 요청
         $.ajax({
@@ -213,8 +228,12 @@
             <input type="hidden" id="marker"/>
             <img id="preview" />
             <div class="input-group mb-3">
-                <input type="file" class="form-control" id="itemImgFile" onchange="readURL(this);">
-              </div>
+                <input type="file" class="form-control" id="itemImgFile1" onchange="readURL(this);">
+                <input type="file" class="form-control" id="itemImgFile2" onchange="readURL(this);">
+                <input type="file" class="form-control" id="itemImgFile3" onchange="readURL(this);">
+                <input type="file" class="form-control" id="itemImgFile4" onchange="readURL(this);">
+                <input type="file" class="form-control" id="itemImgFile5" onchange="readURL(this);">
+            </div>
             <div class="col-12">
             <input type="text" class="form-control" id="content" placeholder="content"/>
             </div>
