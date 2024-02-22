@@ -1,12 +1,11 @@
 package com.today.demo.service;
 
 import com.today.demo.dto.BoardResponseDTO;
+import com.today.demo.dto.ImgDTO;
 import com.today.demo.dto.Request.BoardRequestDTO;
-import com.today.demo.entity.Category;
-import com.today.demo.entity.Marker;
-import com.today.demo.entity.Member;
-import com.today.demo.entity.Board;
+import com.today.demo.entity.*;
 import com.today.demo.repository.BoardRepository;
+import com.today.demo.repository.ImagesRepository;
 import com.today.demo.repository.MarkerRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -30,38 +29,62 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final CategoryService categoryService;
     private final MarkerRepository markerRepository;
+    private final ImagesRepository imagesRepository;
     private final MarkerService markerService;
     private final MemberService memberService;
     private final S3Uploader s3Uploader;
     private final ModelMapper modelMapper;
 
     @Transactional
-    public void postAdd(BoardRequestDTO boardRequestDTO, String userId, MultipartFile image) throws IOException {
+    public void postAdd(BoardRequestDTO boardRequestDTO, String userId, List<MultipartFile> images) throws IOException {
         Category category = categoryService.getCategory(boardRequestDTO.getCategory());
         Marker marker = markerService.getMarker(boardRequestDTO.getMarker());
         Optional<Member> member = memberService.findOne(userId);
 
         Member resolvedMember = member.orElseThrow();
 
-        if(!image.isEmpty()) {
-           String storedFileName = s3Uploader.upload(image,"images");
             Board post = Board.builder()
                     .member(resolvedMember)
                     .content(boardRequestDTO.getContent())
                     .category(category)
                     .marker(marker)
                     .address(boardRequestDTO.getAddress())
-                    .imgUrl(storedFileName)
                     .build();
+
             boardRepository.save(post);
+
+        if (!images.isEmpty()) {
+            List<Images> storedImages = new ArrayList<>();
+            for (MultipartFile image : images) {
+                String storedFileName = s3Uploader.upload(image, "images");
+                Images newImage = Images.builder()
+                        .imgName(image.getOriginalFilename())
+                        .imgUrl(storedFileName)
+                        .board(post)
+                        .build();
+                storedImages.add(newImage);
+            }
+            imagesRepository.saveAll(storedImages);
         }
     }
     public List<Board> getAllTop9(){
-       return boardRepository.findTop9ByOrderByLikeCountDescCreatedAtDesc();
+        return boardRepository.findTop9ByOrderByLikeCountDescCreatedAtDesc();
     }
 
-    public Board getDetail(int boardId){
-        return boardRepository.findById(boardId).orElseThrow(null);
+    public BoardResponseDTO getDetail(int boardId){
+
+        List<Images> imageList = imagesRepository.findByBoardId(boardId);
+
+        List<ImgDTO> boardImgDtoList = new ArrayList<>();
+        for (Images images : imageList) {
+            ImgDTO imgDTO = ImgDTO.of(images);
+            boardImgDtoList.add(imgDTO);
+        }
+
+        Board board = boardRepository.findById(boardId).orElseThrow(null);
+        BoardResponseDTO boardResponseDTO = BoardResponseDTO.of(board);
+        boardResponseDTO.setBoardImgDtoList(boardImgDtoList);
+        return boardResponseDTO;
     }
 
     public List<BoardResponseDTO> getCategoryAndVenue(int venueId, int categoryId, int page, int size) {

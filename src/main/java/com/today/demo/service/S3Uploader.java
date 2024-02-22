@@ -3,6 +3,7 @@ package com.today.demo.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.today.demo.repository.ImagesRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
@@ -30,16 +33,13 @@ public class S3Uploader {
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
-        return upload2(uploadFile, dirName);
-    }
 
-    private String upload2(File uploadFile, String dirName) {
-        String fileName = dirName + "/" + uploadFile.getName();
-        String uploadImageUrl = putS3(uploadFile, fileName);
+        String fileName = generateFileName(multipartFile.getOriginalFilename());  // 파일 이름을 생성
+        String uploadImageUrl = putS3(uploadFile, dirName + "/" + fileName);
 
-        removeNewFile(uploadFile);  // 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)
+        removeNewFile(uploadFile);
 
-        return uploadImageUrl;      // 업로드된 파일의 S3 URL 주소 반환
+        return uploadImageUrl;
     }
 
     private String putS3(File uploadFile, String fileName) {
@@ -67,6 +67,14 @@ public class S3Uploader {
             return Optional.of(convertFile);
         }
         return Optional.empty();
+    }
+
+    private String generateFileName(String originalFileName) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");  // 년월일 형식으로 파일 이름 생성
+        String currentDate = sdf.format(new Date());
+        String extension = originalFileName.substring(originalFileName.lastIndexOf("."));  // 파일 확장자 추출
+        String fileNameWithoutExtension = originalFileName.substring(0, originalFileName.lastIndexOf("."));  // 확장자 제외한 파일 이름 추출
+        return currentDate + "_" + fileNameWithoutExtension + extension;
     }
 
 }

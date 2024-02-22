@@ -43,7 +43,8 @@ public class Board extends BaseEntity {
 
     private String address;
 
-    private String imgUrl;
+    @OneToMany(mappedBy = "board")
+    private List<Images> boardImgDtoList = new ArrayList<>();
 
     @OneToMany(mappedBy = "board")
     private List<Heart> hearts = new ArrayList<>();

@@ -53,7 +53,7 @@ public class BoardController {
 
     @GetMapping("/board/{boardId}")
     public String detail(Principal principal,Model model,@PathVariable int boardId){
-        Board board = boardService.getDetail(boardId);
+        BoardResponseDTO board = boardService.getDetail(boardId);
         boolean heart = false; // 기본값으로 false 설정
 
         if (principal != null) {
@@ -78,7 +78,7 @@ public class BoardController {
 
     @PostMapping(value="/post",consumes = MediaType.MULTIPART_FORM_DATA_VALUE) // 게시글 생성
     @ResponseBody
-    public ResponseEntity<?> postAdd(@Valid BoardRequestDTO boardRequestDTO, @RequestPart(value="image") MultipartFile image, BindingResult bindingResult, Principal principal) {
+    public ResponseEntity<?> postAdd(@Valid BoardRequestDTO boardRequestDTO, @RequestParam(value="image") List<MultipartFile> images, BindingResult bindingResult, Principal principal) {
 
         if (bindingResult.hasErrors()) {
             // 유효성 검사 실패 시 처리
@@ -88,7 +88,7 @@ public class BoardController {
 
         try {
             markerService.getMarker(boardRequestDTO.getMarker());
-            boardService.postAdd(boardRequestDTO,principal.getName(),image);
+            boardService.postAdd(boardRequestDTO,principal.getName(),images);
             return ResponseEntity.ok().body("게시글이 등록되었습니다."); // String 반환
         } catch (IllegalArgumentException | IOException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
