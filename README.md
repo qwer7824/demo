@@ -10,7 +10,7 @@
 - DevOps : AWS EC2 , Docker , Jenkins , AWS Route 53
 
 ## ⚒️ 배포 주소
-http://todaywork.site/
+http://todaywork.site
 
 ## ⚒️ 관계도
 ![오늘뭐하지관계도](https://github.com/qwer7824/demo/assets/8233989/073bcb1f-48c3-448d-a26b-4e5772926c81)
