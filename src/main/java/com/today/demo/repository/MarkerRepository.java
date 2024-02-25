@@ -18,6 +18,4 @@ public interface MarkerRepository extends JpaRepository<Marker, Integer> {
     List<Marker> findByCategory(Category category);
 
     Marker findByLatitudeAndLongitude(double latitude,double longitude);
-
-    List<Marker> findByMember(Member member);
 }

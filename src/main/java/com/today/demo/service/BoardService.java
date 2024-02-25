@@ -127,6 +127,12 @@ public class BoardService {
         return mapBoardListToDTOList(boardList);
     }
 
+    public List<BoardResponseDTO> markerBoardList(int markerId,int page,int size){
+        List<Board> boardList = boardRepository.findByMarkerId(markerId,PageRequest.of(page, size)).getContent();
+        return mapBoardListToDTOList(boardList);
+    }
+
+
 
     public List<BoardResponseDTO> mapBoardListToDTOList(List<Board> boardList) {
         return boardList.stream()

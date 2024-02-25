@@ -64,6 +64,14 @@ public class BoardController {
         return "board/detail";
     }
 
+    @GetMapping("/board/marker/{markerId}")
+    @ResponseBody
+    public List<BoardResponseDTO> markerBoardList(@PathVariable int markerId,
+                                                  @RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "10") int size) {
+        return boardService.markerBoardList(markerId,page,size);
+    }
+
 
     @GetMapping("/post")
     public String post(Model model, Principal principal){
