@@ -36,6 +36,10 @@
         white-space: nowrap;
         width: 250px;
     }
+    .card-img-top {
+        object-fit: fill;
+    }
+
     .card-body{
         text-align: -webkit-center;
         margin-bottom: 10px;
@@ -74,6 +78,8 @@
         }
         .card-img-top{
             height: 100px;
+            object-fit: fill;
+        }
         }
         .card-l{
             font-size: 10px;
@@ -128,7 +134,7 @@
 
                     var card = '<div class="col">' +
                         '<a href="/board/' + item.id + '">' +
-                        '<img src="' + item.imgUrl + '" class="card-img-top rounded" alt="">' +
+                        '<img src="' + item.boardImgDtoList[0].imgUrl + '" class="card-img-top rounded" alt="">' +
                         '<div class="card-body">' +
                         '<span class="card-text card-type">' + item.memberUserid + '</span>' +
                         '<span class="card-l card-type">' + "|" + '</span>' +
@@ -170,7 +176,7 @@
 
                     var card = '<div class="col">' +
                         '<a href="/board/' + item.id + '">' +
-                        '<img src="' + item.imgUrl + '" class="card-img-top rounded" alt="">' +
+                        '<img src="' + item.boardImgDtoList[0].imgUrl + '" class="card-img-top rounded" alt="">' +
                         '<div class="card-body">' +
                         '<span class="card-text card-type">' + item.memberUserid + '</span>' +
                         '<span class="card-l card-type">' + "|" + '</span>' +
