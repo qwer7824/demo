@@ -27,6 +27,15 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
 	implementation group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.2'
+	implementation group: 'org.apache.mahout', name: 'mahout-mr', version: '0.13.0'
+	implementation group: 'org.apache.mahout', name: 'mahout-math', version: '0.13.0'
+	implementation 'org.apache.mahout:mahout-core:0.9'
+	implementation('org.apache.mahout:mahout-integration:0.13.0') {
+		exclude group: 'log4j', module: 'log4j'
+		exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+	}
+	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.3.0'
+	implementation 'org.apache.commons:commons-dbcp2:2.7.0'
 	implementation 'org.modelmapper:modelmapper:2.4.2'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
@@ -44,3 +53,4 @@ tasks.named('test') {
 bootJar{
 	archiveFileName = 'app.jar'
 }
+
