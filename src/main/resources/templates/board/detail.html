@@ -22,38 +22,56 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 80vh;
     }
     .carousel-container{
-        width: 600px;
-        height: 55vh;
         overflow: hidden;
+    }
+    .carousel-inner{
+        width: 550px;
     }
     .img{
         height: 420px;
         object-fit: contain;
     }
+    .card-img-top{
+        width: 200px;
+    }
+    .row{
+        --bs-gutter-x : 0;
+    }
     /* 화면 크기가 768px 이하일 때 */
     @media (max-width: 768px) {
         .carousel-container {
-            width: 98vw;
-            height: 55vh;
+        }
+        .carousel-inner{
+            width: 550px;
         }
         .img{
             height: 468px;
+        }
+        .card-img-top{
+            width: 100%;
         }
     }
 
     /* 화면 크기가 576px 이하일 때 */
     @media (max-width: 576px) {
         .carousel-container {
-            width: 90vw;
-            height: 35vh;
+        }
+        .carousel-inner{
+            width: 100%;
         }
         .img{
             height: 305px;
         }
     }
+
+    a { text-decoration:none !important }
+    a:hover { text-decoration:none !important }
+    p { text-decoration:none !important }
+    p:hover { text-decoration:none !important }
+    h4 { text-decoration:none !important }
+    h4:hover { text-decoration:none !important }
 
 </style>
 
@@ -84,11 +102,11 @@
 
 <div id="body-wrapper">
     <div id=".content">
-        <div class="row gx-0 justify-content-center mx-3">
-            <th:block th:each="board : ${board}">
+        <div class="d-flex flex-column">
+            <th:block th:each="boards : ${board}">
                 <div class="col mt-3">
                     <!-- Carousel container -->
-                    <div class="carousel-container">
+                    <div class="carousel-container d-flex justify-content-center">
                         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-indicators">
                                 <button th:each="img, stat : ${board.getBoardImgDtoList}" type="button" data-bs-target="#carouselExampleIndicators" th:data-bs-slide-to="${stat.index}" th:classappend="${stat.first}? 'active' : ''"></button>
@@ -111,8 +129,9 @@
                     <!-- End of Carousel container -->
 
                     <!-- Content container -->
-                    <div class="content-container mt-3">
+                    <div class="content-container mt-3 m-2">
                         <h2 th:text="${board.markerName}"></h2>
+                        <span><i class="bi bi-star-fill"></i> <span th:text="${board.star}"></span></span>
                         <div class="d-flex">
                             <i class="bi bi-geo-alt text-primary"></i>
                             <p class="text-primary" th:text="${board.address}"></p>
@@ -136,6 +155,23 @@
                     <!-- End of Content container -->
                 </div>
             </th:block>
+            <h5 class="text-center">다른 사람들의 리뷰</h5>
+            <div class="row text-center mb-5">
+            <th:block th:each="recommends : ${recommend}">
+                    <div class="col p-1">
+                        <a th:href="'/board/' +${recommends.id}">
+                    <img th:src="${recommends.boardImgDtoList[0].imgUrl}" class="card-img-top rounded" alt="">
+                    <div class="card-body text-black">
+                        <span class="card-text card-type" th:text="${recommends.memberUserid}"></span>
+                        <span class="card-l card-type">|</span>
+                        <span class="card-text card-type" th:text="${recommends.createdAt}"></span>
+                        <p class="card-title" th:text="${recommends.content}"></p>
+                        <p class="card-text"><i class="bi bi-star m-1"></i><span th:text="${recommends.star}"></span><i class="bi bi-heart m-1"></i><span th:text="${recommends.likeCount}"></span></p>
+                        </div>
+                </a>
+                </div>
+            </th:block>
+        </div>
         </div>
     </div>
 </div>

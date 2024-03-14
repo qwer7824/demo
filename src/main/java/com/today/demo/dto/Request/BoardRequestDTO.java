@@ -14,5 +14,6 @@ public class BoardRequestDTO {
     private int category;
     @NotNull
     private int marker;
+    private float star;
     private String address;
 }

@@ -5,10 +5,7 @@ import com.today.demo.dto.Request.LocationDTO;
 import com.today.demo.dto.Request.MarkerRequestDTO;
 import com.today.demo.dto.Request.BoardRequestDTO;
 import com.today.demo.entity.*;
-import com.today.demo.service.CategoryService;
-import com.today.demo.service.HeartService;
-import com.today.demo.service.MarkerService;
-import com.today.demo.service.BoardService;
+import com.today.demo.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,6 +29,7 @@ public class BoardController {
     private final CategoryService categoryService;
     private final MarkerService markerService;
     private final HeartService heartService;
+    private final MahoutService mahoutService;
 
     @GetMapping("/board")
     public String get(Model model){
@@ -54,12 +52,15 @@ public class BoardController {
     @GetMapping("/board/{boardId}")
     public String detail(Principal principal,Model model,@PathVariable int boardId){
         BoardResponseDTO board = boardService.getDetail(boardId);
+        List<BoardResponseDTO> recommend = mahoutService.BoardRecommand(boardId);
+
         boolean heart = false; // 기본값으로 false 설정
 
         if (principal != null) {
             heart = heartService.heartCheck(principal.getName(), boardId);
         }
         model.addAttribute("board",board);
+        model.addAttribute("recommend",recommend);
         model.addAttribute("heart",heart);
         return "board/detail";
     }

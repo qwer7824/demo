@@ -275,6 +275,8 @@
       url: url, // 생성한 URL을 사용합니다.
       method: 'GET',
       success: function(response) {
+        currentPage = 0;
+        $('#pagination').empty();
         $('.row').empty(); // 기존 목록 초기화
 
         response.forEach(function(item) {
@@ -289,7 +291,7 @@
                   '<span class="card-text card-type">' + createdAt + '</span>' +
                   '<p class="card-text location-color">' + '<i class="bi bi-geo-alt"></i>' + item.address + '</p>' +
                   '<p class="card-title">' + item.content + '</p>' +
-                  '<p class="card-text">' + '<i class="bi bi-heart"></i>' + item.likeCount + '</p>' +
+                  '<p class="card-text">' + '<i class="bi bi-star m-1"></i>' + item.star + '<i class="bi bi-heart m-1"></i>' + item.likeCount + '</p>' +
                   '</div>' +
                   '</div>';
           $('.row').append(card);
@@ -297,6 +299,7 @@
         });
 
         let totalCount = response.length;
+        console.log(totalCount);
         renderPagination(totalCount);
 
       },

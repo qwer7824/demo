@@ -22,9 +22,9 @@ public class Board extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
-    private int id;
+    private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", foreignKey = @ForeignKey(name = "member_b_id"))
     private Member member;
 
@@ -43,11 +43,14 @@ public class Board extends BaseEntity {
 
     private String address;
 
+    private float star;
+
     @OneToMany(mappedBy = "board")
     private List<Images> boardImgDtoList = new ArrayList<>();
 
     @OneToMany(mappedBy = "board")
     private List<Heart> hearts = new ArrayList<>();
+
 
     public void addCount(){
         this.likeCount += 1;

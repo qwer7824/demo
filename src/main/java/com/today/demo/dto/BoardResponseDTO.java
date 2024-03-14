@@ -25,6 +25,7 @@ public class BoardResponseDTO {
     private String memberUserid;
     private String categoryName;
     private String address;
+    private float star;
     private int likeCount;
     private String createdAt;
     private List<ImgDTO> boardImgDtoList = new ArrayList<>();

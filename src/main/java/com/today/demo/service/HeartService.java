@@ -28,7 +28,7 @@ public class HeartService {
     private final MemberService memberService;
 
     @Transactional
-    public void insert(String userId,int boardId) {
+    public void insert(String userId,long boardId) {
 
         Member member = memberRepository.findByUserid(userId)
                 .orElseThrow(() -> new NotFoundException("Could not found member id : "));
@@ -53,7 +53,7 @@ public class HeartService {
     }
 
     @Transactional
-    public void delete(String userId,int boardId) {
+    public void delete(String userId,long boardId) {
 
         Member member = memberRepository.findByUserid(userId)
                 .orElseThrow(() -> new NotFoundException("Could not found member id : "));
@@ -69,7 +69,7 @@ public class HeartService {
     }
 
     @Transactional
-    public boolean heartCheck(String userId, int boardId) {
+    public boolean heartCheck(String userId, long boardId) {
 
         Member member = memberRepository.findByUserid(userId)
                 .orElseThrow(() -> new NotFoundException("Could not found member id : "));

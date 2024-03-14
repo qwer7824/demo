@@ -13,14 +13,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BoardRepository extends JpaRepository<Board, Integer> {
+public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findTop9ByOrderByLikeCountDescCreatedAtDesc();
 
-    Page<Board> findByCategoryId(int categoryId, PageRequest pageRequest);
+    Page<Board> findByCategoryIdOrderByCreatedAtDesc(int categoryId, PageRequest pageRequest);
 
-    Page<Board> findByMarkerId(int markerId,PageRequest pageRequest);
+    Page<Board> findByMarkerIdOrderByCreatedAtDesc(int markerId,PageRequest pageRequest);
 
     Page<Board> findByMarkerIdAndCategoryId(int markerId, int categoryId,PageRequest pageRequest);
 
     Page<Board> findByMember(Member member,PageRequest pageRequest);
+
+    Page<Board> findAllByOrderByCreatedAtDesc(PageRequest pageRequest);
 }

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +50,7 @@ public class BoardService {
                     .category(category)
                     .marker(marker)
                     .address(boardRequestDTO.getAddress())
+                    .star(boardRequestDTO.getStar())
                     .build();
 
             boardRepository.save(post);
@@ -71,7 +73,7 @@ public class BoardService {
         return boardRepository.findTop9ByOrderByLikeCountDescCreatedAtDesc();
     }
 
-    public BoardResponseDTO getDetail(int boardId){
+    public BoardResponseDTO getDetail(long boardId){
 
         List<Images> imageList = imagesRepository.findByBoardId(boardId);
 
@@ -89,19 +91,19 @@ public class BoardService {
 
     public List<BoardResponseDTO> getCategoryAndVenue(int venueId, int categoryId, int page, int size) {
         if (venueId == 0 && categoryId == 0) {
-            Page<Board> boardPage = boardRepository.findAll(PageRequest.of(page, size));
+            Page<Board> boardPage = boardRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, size));
             List<Board> boardList = boardPage.getContent();
             return mapBoardListToDTOList(boardList);
         } else if (venueId == 0) {
             // venueId가 0인 경우 categoryId에 해당하는 게시판을 조회
-            List<Board> boardList = boardRepository.findByCategoryId(categoryId, PageRequest.of(page, size)).getContent();
+            List<Board> boardList = boardRepository.findByCategoryIdOrderByCreatedAtDesc(categoryId, PageRequest.of(page, size)).getContent();
             return mapBoardListToDTOList(boardList);
         } else if (categoryId == 0) {
             // categoryId가 0인 경우 venueId에 해당하는 모든 게시판을 조회
             List<Marker> markers = markerRepository.findByVenue(venueId);
             List<Board> boardList = new ArrayList<>();
             for (Marker marker : markers) {
-                List<Board> boards = boardRepository.findByMarkerId(marker.getId(), PageRequest.of(page, size)).getContent();
+                List<Board> boards = boardRepository.findByMarkerIdOrderByCreatedAtDesc(marker.getId(), PageRequest.of(page, size)).getContent();
                 boardList.addAll(boards);
             }
             return mapBoardListToDTOList(boardList);
@@ -128,11 +130,24 @@ public class BoardService {
     }
 
     public List<BoardResponseDTO> markerBoardList(int markerId,int page,int size){
-        List<Board> boardList = boardRepository.findByMarkerId(markerId,PageRequest.of(page, size)).getContent();
+        List<Board> boardList = boardRepository.findByMarkerIdOrderByCreatedAtDesc(markerId,PageRequest.of(page, size)).getContent();
         return mapBoardListToDTOList(boardList);
     }
 
 
+
+    public List<BoardResponseDTO> getBoardRecommand(long boardId){
+
+        Optional<Board> board = boardRepository.findById(boardId);
+
+        if (board.isPresent()) {
+            List<Board> boardList = new ArrayList<>();
+            boardList.add(board.get());
+            return mapBoardListToDTOList(boardList);
+        } else {
+            return new ArrayList<>(); // 빈 리스트 반환 또는 예외 처리 등의 로직 추가
+        }
+    }
 
     public List<BoardResponseDTO> mapBoardListToDTOList(List<Board> boardList) {
         return boardList.stream()
