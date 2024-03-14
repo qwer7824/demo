@@ -21,6 +21,6 @@ public class Images {
     private String imgUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", foreignKey = @ForeignKey(name = "board_i_id"))
+    @JoinColumn(name = "board_id")
     private Board board;
 }

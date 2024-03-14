@@ -25,11 +25,11 @@ public class Marker extends BaseEntity{
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cate_id", foreignKey = @ForeignKey(name = "cate_m_id"))
+    @JoinColumn(name = "cate_id")
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(name = "member_m_id"))
+    @JoinColumn(name = "member_id")
     private Member member;
 
     private int venue;

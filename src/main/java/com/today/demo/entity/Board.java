@@ -25,7 +25,7 @@ public class Board extends BaseEntity {
     private long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(name = "member_b_id"))
+    @JoinColumn(name = "member_id")
     private Member member;
 
     private String content;
@@ -34,11 +34,11 @@ public class Board extends BaseEntity {
     private int likeCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cate_id", foreignKey = @ForeignKey(name = "cate_b_id"))
+    @JoinColumn(name = "cate_id")
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "marker_id", foreignKey = @ForeignKey(name = "marker_b_id"))
+    @JoinColumn(name = "marker_id")
     private Marker marker;
 
     private String address;
